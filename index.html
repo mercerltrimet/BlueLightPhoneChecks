@@ -55,6 +55,7 @@
         .controls { margin-top: 15px; display: flex; justify-content: flex-end; }
         .btn-reset { background-color: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-reset:hover { background-color: #5a6268; }
+        .btn-undo { background-color: #ffc107; color: #212529; }
 
         /* Modal Overlay */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 100; }
@@ -64,7 +65,7 @@
         .btn-yes { background: #28a745; color: white; }
         .btn-no { background: #dc3545; color: white; }
         .btn-primary { background: #007bff; color: white; }
-        input[type="text"] { width: 100%; padding: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
         textarea { width: 100%; height: 180px; padding: 10px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 14px; resize: vertical; }
 
         /* Floating Action Buttons Group */
@@ -136,7 +137,7 @@
                 <li><em>No issues reported yet.</em></li>
             </ul>
             <div class="controls">
-                <button class="btn-reset" onclick="resetAll()">Reset Weekly Progress</button>
+                <button class="btn-reset" onclick="requestAdminAccess(resetAll)">🔒 Reset Weekly Progress (Admin)</button>
             </div>
 
             <!-- Previous Week Summary Archive -->
@@ -161,6 +162,7 @@
             <div class="modal-buttons">
                 <button class="btn-yes" onclick="handleYes()">Yes</button>
                 <button class="btn-no" onclick="handleNoPrompt()">No</button>
+                <button class="btn-undo" onclick="requestAdminAccess(resetSinglePhone)">🔒 Reset This Phone</button>
             </div>
         </div>
     </div>
@@ -183,11 +185,26 @@
         </div>
     </div>
 
-    <!-- Modal 3: Changelog Popup -->
+    <!-- Modal 3: Admin Auth Prompt -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <h3>🔒 Admin Authorization Required</h3>
+            <p>Please enter the admin password to perform this action:</p>
+            <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password">
+            <p id="adminErrorText" style="color: red; font-size: 12px; display: none;">Incorrect password. Try again.</p>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="verifyAdminPassword()">Authenticate</button>
+                <button class="btn-no" onclick="closeAdminModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: Changelog Popup -->
     <div class="modal" id="changelogModal">
         <div class="modal-content">
             <h3>📜 Patch Notes & Updates</h3>
             <ul>
+                <li>🛑 Added admin protected reset button... stop resetting it please</li>
                 <li>🦆 Changed yellow to be Oregon Ducks-colored</li>
                 <li>🌲 Made the green line a darker shade of green</li>
                 <li>🤓 Reordered the trains to be in order</li>
@@ -195,6 +212,7 @@
                 <li>🎨 Made the colors pretty</li>
                 <li>📋 Added a previous week thing to make sure there is no duplicates</li>
                 <li>🚨 Added a shared notepad for possessed computers</li>
+                <li>🔒 Added admin password lock for resetting phones & full week progress</li>
             </ul>
             <div class="modal-buttons">
                 <button class="btn-primary" onclick="closeChangelog()">Close & Resume Checking Phones</button>
@@ -202,7 +220,7 @@
         </div>
     </div>
 
-    <!-- Modal 4: Shared IT Notepad Popup -->
+    <!-- Modal 5: Shared IT Notepad Popup -->
     <div class="modal" id="notepadModal">
         <div class="modal-content" style="width: 500px;">
             <h3>🚨 Help! Computers Are Possessed By Demons</h3>
@@ -221,6 +239,11 @@
     </div>
 
     <script>
+        // CONFIGURATION: Set your admin password here!
+        const ADMIN_PASSWORD = "admin123";
+        let isAdminAuthenticated = false;
+        let pendingAdminAction = null;
+
         // Firebase Configuration Keys
         const firebaseConfig = {
             apiKey: "AIzaSyBGJMagjXti25kZZ27v76IPoQSAVnPoJ6E",
@@ -474,6 +497,36 @@
             listEl.innerHTML = issuesHTML || "<li><em>No issues reported yet.</em></li>";
         }
 
+        // Admin Lock Gatekeeper
+        function requestAdminAccess(actionCallback) {
+            if (isAdminAuthenticated) {
+                actionCallback();
+            } else {
+                pendingAdminAction = actionCallback;
+                document.getElementById("adminPasswordInput").value = "";
+                document.getElementById("adminErrorText").style.display = "none";
+                document.getElementById("adminModal").style.display = "flex";
+            }
+        }
+
+        function verifyAdminPassword() {
+            const entered = document.getElementById("adminPasswordInput").value;
+            if (entered === ADMIN_PASSWORD) {
+                isAdminAuthenticated = true;
+                closeAdminModal();
+                if (pendingAdminAction) {
+                    pendingAdminAction();
+                    pendingAdminAction = null;
+                }
+            } else {
+                document.getElementById("adminErrorText").style.display = "block";
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById("adminModal").style.display = "none";
+        }
+
         function openCheckModal(id) {
             activePhoneId = id;
             const phone = phones.find(p => p && p.id === id);
@@ -498,6 +551,17 @@
             document.getElementById("issueDescription").value = "";
             document.getElementById("workOrderInput").value = "";
             document.getElementById("modalPrompt2").style.display = "flex";
+        }
+
+        function resetSinglePhone() {
+            const phone = phones.find(p => p && p.id === activePhoneId);
+            if (phone) {
+                phone.status = "untested";
+                phone.issue = "";
+                phone.workOrder = "";
+                closeModals();
+                phonesRef.set(phones);
+            }
         }
 
         function saveIssue() {
@@ -534,7 +598,6 @@
 
         function resetAll() {
             if (confirm("Are you sure you want to reset all phone statuses? Current progress will be archived as 'Last Week's Summary'.")) {
-                
                 let workingCount = 0;
                 let issueCount = 0;
                 let issuesList = [];
