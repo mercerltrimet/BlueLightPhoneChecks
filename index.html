@@ -37,6 +37,7 @@
         .bg-orange { background-color: #e67e22; }
         .bg-red { background-color: #d9534f; }
         .bg-misc { background-color: #7f8c8d; }
+        .bg-intercom { background-color: #8e44ad; }
 
         .line-blue { border-left: 6px solid #2b70c9; }
         .line-yellow { border-left: 6px solid #FEE12B; }
@@ -44,6 +45,7 @@
         .line-orange { border-left: 6px solid #e67e22; }
         .line-red { border-left: 6px solid #d9534f; }
         .line-misc { border-left: 6px solid #7f8c8d; }
+        .line-intercom { border-left: 6px solid #8e44ad; }
 
         /* Phone Grid */
         .phone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
@@ -376,12 +378,13 @@
         const officersRef = db.ref('line_officers');
 
         const lineCategories = [
-            { key: "Blue Line", title: "Blue Line", bgClass: "bg-blue", borderClass: "line-blue" },
-            { key: "Yellow Line", title: "Yellow Line", bgClass: "bg-yellow", borderClass: "line-yellow" },
-            { key: "Green Line", title: "Green Line", bgClass: "bg-green", borderClass: "line-green" },
-            { key: "Orange Line", title: "Orange Line", bgClass: "bg-orange", borderClass: "line-orange" },
-            { key: "Red Line", title: "Red Line", bgClass: "bg-red", borderClass: "line-red" },
-            { key: "Miscellaneous", title: "Miscellaneous", bgClass: "bg-misc", borderClass: "line-misc" }
+            { key: "Blue Line", title: "Blue Line", icon: "🚆", bgClass: "bg-blue", borderClass: "line-blue" },
+            { key: "Yellow Line", title: "Yellow Line", icon: "🚆", bgClass: "bg-yellow", borderClass: "line-yellow" },
+            { key: "Green Line", title: "Green Line", icon: "🚆", bgClass: "bg-green", borderClass: "line-green" },
+            { key: "Orange Line", title: "Orange Line", icon: "🚆", bgClass: "bg-orange", borderClass: "line-orange" },
+            { key: "Red Line", title: "Red Line", icon: "🚆", bgClass: "bg-red", borderClass: "line-red" },
+            { key: "Miscellaneous", title: "Miscellaneous", icon: "🚆", bgClass: "bg-misc", borderClass: "line-misc" },
+            { key: "Intercom", title: "🔊 Intercom 🔊", icon: "", bgClass: "bg-intercom", borderClass: "line-intercom" }
         ];
 
         const rawPhoneData = [
@@ -476,7 +479,10 @@
             { line: "Orange Line", name: "Park Ave WB", id: "1856" },
             { line: "Orange Line", name: "Park Ave EB", id: "1857" },
             { line: "Red Line", name: "Park Rose", id: "1859" },
-            { line: "Miscellaneous", name: "Tigard Transit", id: "1860" }
+            { line: "Miscellaneous", name: "Tigard Transit", id: "1860" },
+            { line: "Intercom", name: "Elmonica", id: "INT-ELM" },
+            { line: "Intercom", name: "122nd", id: "INT-122" },
+            { line: "Intercom", name: "148th", id: "INT-148" }
         ];
 
         function buildDefaultPhones() {
@@ -571,9 +577,11 @@
                         ${officerName ? 'Unassign Officer' : 'Assign Officer'}
                        </button>`;
 
+                const iconHTML = category.icon ? `<span>${category.icon}</span>` : "";
+
                 header.innerHTML = `
                     <div class="line-header-left">
-                        <span>🚆</span>
+                        ${iconHTML}
                         <span>${category.title}</span>
                         ${officerBadgeHTML}
                     </div>
