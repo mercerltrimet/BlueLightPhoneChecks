@@ -30,16 +30,16 @@
             padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: normal; 
         }
         
-        /* Line Colors */
+        /* Line Colors - Ducks Yellow Updated (#FEE12B) */
         .bg-blue { background-color: #2b70c9; }
-        .bg-yellow { background-color: #FEE11A; color: #111; }
+        .bg-yellow { background-color: #FEE12B; color: #111; }
         .bg-green { background-color: #1e5631; color: #ffffff; }
         .bg-orange { background-color: #e67e22; }
         .bg-red { background-color: #d9534f; }
         .bg-misc { background-color: #7f8c8d; }
 
         .line-blue { border-left: 6px solid #2b70c9; }
-        .line-yellow { border-left: 6px solid #FEE11A; }
+        .line-yellow { border-left: 6px solid #FEE12B; }
         .line-green { border-left: 6px solid #1e5631; }
         .line-orange { border-left: 6px solid #e67e22; }
         .line-red { border-left: 6px solid #d9534f; }
@@ -61,9 +61,11 @@
         ul { padding-left: 20px; max-height: 25vh; overflow-y: auto; }
 
         /* Controls & Header Action Buttons */
-        .controls { margin-top: 15px; display: flex; justify-content: flex-end; }
+        .controls { margin-top: 15px; display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
         .btn-reset { background-color: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-reset:hover { background-color: #5a6268; }
+        .btn-undo { background-color: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-undo:hover { background-color: #bd2130; }
 
         .btn-officer {
             background-color: rgba(255, 255, 255, 0.9);
@@ -106,29 +108,11 @@
         }
         .btn-modal-top-reset:hover { background-color: #e0a800; }
 
-        /* Reference Card Containers in Report Modal */
-        .reference-card {
-            border-radius: 6px;
-            padding: 10px;
-            margin-bottom: 12px;
-            font-size: 13px;
-        }
-        .last-week-card {
-            background-color: #f1f3f5;
-            border: 1px dashed #adb5bd;
-        }
-        .current-issue-card {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
-        .btn-copy-data {
-            color: white;
-            font-size: 11px;
-            padding: 4px 8px;
-            margin-top: 6px;
-            border-radius: 3px;
-        }
+        /* Reference Cards */
+        .reference-card { border-radius: 6px; padding: 10px; margin-bottom: 12px; font-size: 13px; }
+        .last-week-card { background-color: #f1f3f5; border: 1px dashed #adb5bd; }
+        .current-issue-card { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .btn-copy-data { color: white; font-size: 11px; padding: 4px 8px; margin-top: 6px; border-radius: 3px; }
         .btn-copy-last { background-color: #17a2b8; }
         .btn-copy-last:hover { background-color: #138496; }
         .btn-copy-active { background-color: #dc3545; }
@@ -137,38 +121,17 @@
         input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
         textarea { width: 100%; height: 180px; padding: 10px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 14px; resize: vertical; }
 
-        /* Welcome Screen Role Cards */
-        .role-selection-box { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
-        .role-card { background: #f8f9fa; border: 2px solid #007bff; border-radius: 6px; padding: 12px; cursor: pointer; transition: 0.2s; text-align: left; }
+        /* Larger Welcome Screen Role Cards */
+        .role-selection-box { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+        .role-card { background: #f8f9fa; border: 2px solid #007bff; border-radius: 8px; padding: 16px; cursor: pointer; transition: 0.2s; text-align: left; }
         .role-card:hover { background: #e7f1ff; transform: translateY(-2px); }
-        .role-card h4 { margin: 0 0 4px 0; color: #007bff; font-size: 16px; }
-        .role-card p { margin: 0; font-size: 13px; color: #555; }
+        .role-card h4 { margin: 0 0 6px 0; color: #007bff; font-size: 18px; }
+        .role-card p { margin: 0; font-size: 14px; color: #555; }
 
-        /* Floating Action Buttons Group */
-        .floating-buttons {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 99;
-        }
-
-        .floating-btn {
-            background-color: #343a40;
-            color: #fff;
-            border: 2px solid #6c757d;
-            border-radius: 20px;
-            padding: 8px 14px;
-            font-size: 12px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transition: transform 0.2s, background-color 0.2s;
-        }
-        .floating-btn:hover {
-            transform: scale(1.08) rotate(-2deg);
-            background-color: #212529;
-        }
+        /* Floating Action Buttons */
+        .floating-buttons { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 99; }
+        .floating-btn { background-color: #343a40; color: #fff; border: 2px solid #6c757d; border-radius: 20px; padding: 8px 14px; font-size: 12px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.2s, background-color 0.2s; }
+        .floating-btn:hover { transform: scale(1.08) rotate(-2deg); background-color: #212529; }
     </style>
 
     <!-- Firebase SDKs -->
@@ -177,7 +140,6 @@
 </head>
 <body>
 
-    <!-- Top Header Branding -->
     <div class="header-container">
         <svg class="trimet-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <rect width="100" height="100" rx="20" fill="#D84A26"/>
@@ -192,15 +154,11 @@
     </div>
 
     <div class="container">
-        <!-- Interactive Phones Panel Grouped By Line -->
         <div class="panel">
             <h2>Phone Directory</h2>
-            <div class="lines-container" id="linesContainer">
-                <!-- Line groups & Phone grids injected via JS -->
-            </div>
+            <div class="lines-container" id="linesContainer"></div>
         </div>
 
-        <!-- Live Summary Panel -->
         <div class="panel">
             <h2>Live Summary Report</h2>
             <div class="summary-box">
@@ -212,10 +170,10 @@
                 <li><em>No issues reported yet.</em></li>
             </ul>
             <div class="controls">
-                <button class="btn-reset" onclick="requestAdminAccess(resetAll)">🔒 Reset Weekly Progress (Admin)</button>
+                <button class="btn-undo" onclick="requestAdminAccess(undoResetProgress)">🚨 OH SHIT (Undo Reset)</button>
+                <button class="btn-reset" onclick="requestAdminAccess(confirmResetAll)">🔒 Reset Weekly Progress (Admin)</button>
             </div>
 
-            <!-- Previous Week Summary Archive -->
             <div class="archive-box">
                 <h3>Last Week's Summary</h3>
                 <p><strong>Last Reset Date:</strong> <span id="lastResetDate">N/A</span></p>
@@ -229,21 +187,39 @@
         </div>
     </div>
 
-    <!-- Modal 0: Initial Welcome / Role Prompt -->
+    <!-- Modal 0: Initial Welcome / Expanded 3-Mode Selection -->
     <div class="modal" id="welcomeModal" style="display: flex;">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 540px;">
             <h3>👋 Welcome to Phone System Check</h3>
-            <p>Please select your goal for this session:</p>
+            <p>Select an operational mode to continue:</p>
             
             <div class="role-selection-box">
                 <div class="role-card" onclick="openBossSummary()">
-                    <h4>🗿 I AM CHAD</h4>
-                    <p>View live executive status, total working phones, and active ticket logs without editing.</p>
+                    <h4>🗿 Chad: Summary and statistics</h4>
+                    <p>View high-level real-time metrics, system uptime, and active ticket logs.</p>
                 </div>
-                <div class="role-card" style="border-color: #28a745;" onclick="closeWelcomeModal()">
-                    <h4 style="color: #28a745;">🛠️ I AM NOT CHAD</h4>
-                    <p>Enter the full interactive directory to inspect and test phone platforms.</p>
+                <div class="role-card" style="border-color: #28a745;" onclick="promptTrimetPassword()">
+                    <h4 style="color: #28a745;">🚌 TriMet: Edit and test phones</h4>
+                    <p>Full interactive inspection clearance. Requires passkey authorization.</p>
                 </div>
+                <div class="role-card" style="border-color: #17a2b8;" onclick="enableAlliedViewerMode()">
+                    <h4 style="color: #17a2b8;">🛡️ Allied: Viewer mode</h4>
+                    <p>Read-only access to track system progress, scroll directories, and inspect active issues.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 0A: TriMet Password Modal -->
+    <div class="modal" id="trimetAuthModal">
+        <div class="modal-content">
+            <h3>🔑 TriMet Authorization Required</h3>
+            <p>Enter password to unlock edit and testing mode:</p>
+            <input type="password" id="trimetPasswordInput" placeholder="Enter password">
+            <p id="trimetErrorText" style="color: red; font-size: 12px; display: none;">Incorrect password. Hint: trimet</p>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="backToWelcome()">Back</button>
+                <button class="btn-primary" onclick="verifyTrimetPassword()">Login</button>
             </div>
         </div>
     </div>
@@ -284,14 +260,12 @@
         <div class="modal-content">
             <h3>Report Issue</h3>
             
-            <!-- Current Active Issue Card (Visible when red) -->
             <div id="currentIssueCard" class="reference-card current-issue-card" style="display:none;">
                 <strong>🚨 Current Active Issue:</strong>
                 <div id="currentIssueInfoText" style="margin-top: 4px;">Loading active issue...</div>
                 <button id="btnCopyCurrentIssue" class="btn-copy-data btn-copy-active" onclick="copyCurrentIssueData()">📋 Copy Active Data</button>
             </div>
 
-            <!-- Last Week Reference Box -->
             <div class="reference-card last-week-card">
                 <strong>Last Week's Status:</strong>
                 <div id="lastWeekInfoText" style="margin-top: 4px; color: #555;">Checking history...</div>
@@ -340,23 +314,20 @@
         </div>
     </div>
 
-    <!-- Modal 5: Changelog Popup -->
+    <!-- Modal 5: Funny Changelog Popup -->
     <div class="modal" id="changelogModal">
         <div class="modal-content">
-            <h3>📜 Patch Notes & Updates</h3>
+            <h3>📜 Patch Notes: "The Panic Button Era"</h3>
             <ul>
-                <li>👮 Added "Assign Officer" option to each line header (Blue, Yellow, Green, Orange, Red, Misc)</li>
-                <li>🚨 Added Current Issue preview & copy button inside issue popup when modifying flagged phones</li>
-                <li>❌ Added Cancel button in Issue modal to protect against misclicks</li>
-                <li>📌 Shifted reset button inside modal to top-right corner</li>
-                <li>📋 Added last week's issue info & auto-copy button inside issue dialog</li>
-                <li>💬 Added hover tooltips over red flagged phone cards showing active issues</li>
-                <li>📊 Added role selection modal featuring Chad Mode vs. Non-Chad Mode</li>
-                <li>🛑 Added admin protected reset button</li>
-                <li>🌲 Made the green line a darker shade of green</li>
+                <li>🦆 **Ducks Fly Together:** Upgraded the Yellow Line color to authentic, eye-searing Oregon Ducks Yellow (`#FEE12B`). Sco Ducks!</li>
+                <li>🚨 **The "OH SHIT" Button:** Accidental wipe? Added a panic restore button to save you from IT purgatory.</li>
+                <li>🔐 **Gatekeeping 101:** Separated users into Chad (Metrics), TriMet (Interactive password `trimet`), and Allied (Look-but-don't-touch).</li>
+                <li>👮 **Cop Copity Cop:** Added "Assign Officer" headers so everyone knows who to blame if a platform goes silent.</li>
+                <li>📋 **Copy-Paste Laziness:** Added auto-fill buttons so you don't even have to re-type last week's broken dial tones.</li>
+                <li>🌲 **Dark Green Chic:** Adjusted Green Line styling so it no longer looks like radioactive lime juice.</li>
             </ul>
             <div class="modal-buttons">
-                <button class="btn-primary" onclick="closeChangelog()">Close & Resume Checking Phones</button>
+                <button class="btn-primary" onclick="closeChangelog()">Close & Resume Checking</button>
             </div>
         </div>
     </div>
@@ -376,13 +347,16 @@
     <!-- Floating Action Buttons -->
     <div class="floating-buttons">
         <button class="floating-btn" onclick="openBossSummary()">🗿 I AM CHAD</button>
-        <button class="floating-btn" onclick="openNotepad()">🚨 Help! Computers Are Possessed By Demons</button>
+        <button class="floating-btn" onclick="openNotepad()">🚨 Help! IT Demons</button>
         <button class="floating-btn" onclick="openChangelog()">🛠️ Changelog</button>
     </div>
 
     <script>
         const ADMIN_PASSWORD = "admin123";
+        const TRIMET_PASSWORD = "trimet";
+        
         let isAdminAuthenticated = false;
+        let isViewerOnly = false;
         let pendingAdminAction = null;
 
         const firebaseConfig = {
@@ -412,7 +386,6 @@
         ];
 
         const rawPhoneData = [
-            // Blue Line
             { line: "Blue Line", name: "Hillsboro TC EB", id: "1864" },
             { line: "Blue Line", name: "Hillsboro TC WB", id: "1865" },
             { line: "Blue Line", name: "Tuality (HB Health)", id: "1889" },
@@ -468,8 +441,6 @@
             { line: "Blue Line", name: "Gresham Central EB", id: "1832" },
             { line: "Blue Line", name: "Gresham Central WB", id: "1833" },
             { line: "Blue Line", name: "Cleveland", id: "1880" },
-
-            // Yellow Line
             { line: "Yellow Line", name: "Expo North", id: "1887" },
             { line: "Yellow Line", name: "Expo South", id: "1888" },
             { line: "Yellow Line", name: "Delta Park", id: "1834" },
@@ -485,8 +456,6 @@
             { line: "Yellow Line", name: "Overlook SB", id: "1845" },
             { line: "Yellow Line", name: "Albina-Mississippi", id: "1882" },
             { line: "Yellow Line", name: "IRQ NB", id: "1842" },
-
-            // Green Line
             { line: "Green Line", name: "Main St", id: "1846" },
             { line: "Green Line", name: "Division", id: "1847" },
             { line: "Green Line", name: "Powell", id: "1848" },
@@ -495,8 +464,6 @@
             { line: "Green Line", name: "Flavel", id: "1851" },
             { line: "Green Line", name: "Fuller", id: "1852" },
             { line: "Green Line", name: "CTC", id: "1853" },
-
-            // Orange Line
             { line: "Orange Line", name: "South Waterfront", id: "1891" },
             { line: "Orange Line", name: "North Waterfront", id: "1892" },
             { line: "Orange Line", name: "OMSI NB", id: "1854" },
@@ -509,11 +476,7 @@
             { line: "Orange Line", name: "Milwaukie/Main", id: "1877" },
             { line: "Orange Line", name: "Park Ave WB", id: "1856" },
             { line: "Orange Line", name: "Park Ave EB", id: "1857" },
-
-            // Red Line
             { line: "Red Line", name: "Park Rose", id: "1859" },
-
-            // Miscellaneous
             { line: "Miscellaneous", name: "Tigard Transit", id: "1860" }
         ];
 
@@ -534,18 +497,10 @@
         let lastWeekDataCache = null;
         let activePhoneId = null;
 
-        // Firebase Listener: Active Phones
         phonesRef.on('value', (snapshot) => {
             const val = snapshot.val();
-            let parsedData = [];
-
-            if (val) {
-                parsedData = Array.isArray(val) ? val : Object.values(val);
-            }
-
-            const isInvalid = !parsedData || parsedData.length === 0 || !parsedData[0] || !parsedData[0].line;
-
-            if (isInvalid) {
+            let parsedData = Array.isArray(val) ? val : (val ? Object.values(val) : []);
+            if (!parsedData || parsedData.length === 0 || !parsedData[0] || !parsedData[0].line) {
                 phones = buildDefaultPhones();
                 phonesRef.set(phones);
             } else {
@@ -554,13 +509,11 @@
             renderPhones();
         });
 
-        // Firebase Listener: Officers
         officersRef.on('value', (snapshot) => {
             lineOfficers = snapshot.val() || {};
             renderPhones();
         });
 
-        // Firebase Listener: Last Week Summary Archive
         lastWeekRef.on('value', (snapshot) => {
             const data = snapshot.val();
             lastWeekDataCache = data;
@@ -579,7 +532,6 @@
             }
         });
 
-        // Firebase Listener & Sync for Shared Notepad
         notepadRef.on('value', (snapshot) => {
             const text = snapshot.val();
             const area = document.getElementById("sharedNotepadArea");
@@ -614,15 +566,19 @@
                 const officerName = lineOfficers[category.key] || "";
                 const officerBadgeHTML = officerName ? `<span class="officer-tag">Assigned Officer: ${officerName}</span>` : "";
 
+                const officerBtn = isViewerOnly 
+                    ? '' 
+                    : `<button class="btn-officer ${officerName ? 'unassign' : ''}" onclick="toggleOfficerAssignment('${category.key}')">
+                        ${officerName ? 'Unassign Officer' : 'Assign Officer'}
+                       </button>`;
+
                 header.innerHTML = `
                     <div class="line-header-left">
                         <span>🚆</span>
                         <span>${category.title}</span>
                         ${officerBadgeHTML}
                     </div>
-                    <button class="btn-officer ${officerName ? 'unassign' : ''}" onclick="toggleOfficerAssignment('${category.key}')">
-                        ${officerName ? 'Unassign Officer' : 'Assign Officer'}
-                    </button>
+                    ${officerBtn}
                 `;
                 section.appendChild(header);
 
@@ -647,7 +603,11 @@
                         card.removeAttribute("title");
                     }
 
-                    card.onclick = () => openCheckModal(phone.id);
+                    if (!isViewerOnly) {
+                        card.onclick = () => openCheckModal(phone.id);
+                    } else {
+                        card.style.cursor = "default";
+                    }
                     grid.appendChild(card);
                 });
 
@@ -655,25 +615,62 @@
                 container.appendChild(section);
             });
 
-            // Update live page counts
             document.getElementById("workingCount").innerText = `${workingCount}/${totalPhones}`;
             document.getElementById("issueCount").innerText = `${issueCount}/${totalPhones}`;
             document.getElementById("issuesList").innerHTML = issuesHTML || "<li><em>No issues reported yet.</em></li>";
 
-            // Update Boss Popup counts
             document.getElementById("bossWorkingCount").innerText = `${workingCount}/${totalPhones}`;
             document.getElementById("bossIssueCount").innerText = `${issueCount}/${totalPhones}`;
             document.getElementById("bossIssuesList").innerHTML = issuesHTML || "<li><em>No active issues reported. All systems optimal!</em></li>";
         }
 
-        // Officer Assignment Modal logic
+        /* Mode Selection Functions */
+        function promptTrimetPassword() {
+            document.getElementById("welcomeModal").style.display = "none";
+            document.getElementById("trimetPasswordInput").value = "";
+            document.getElementById("trimetErrorText").style.display = "none";
+            document.getElementById("trimetAuthModal").style.display = "flex";
+        }
+
+        function backToWelcome() {
+            document.getElementById("trimetAuthModal").style.display = "none";
+            document.getElementById("welcomeModal").style.display = "flex";
+        }
+
+        function verifyTrimetPassword() {
+            const entered = document.getElementById("trimetPasswordInput").value;
+            if (entered === TRIMET_PASSWORD) {
+                isViewerOnly = false;
+                document.getElementById("trimetAuthModal").style.display = "none";
+                renderPhones();
+            } else {
+                document.getElementById("trimetErrorText").style.display = "block";
+            }
+        }
+
+        function enableAlliedViewerMode() {
+            isViewerOnly = true;
+            document.getElementById("welcomeModal").style.display = "none";
+            renderPhones();
+        }
+
+        function openBossSummary() {
+            document.getElementById("welcomeModal").style.display = "none";
+            document.getElementById("bossSummaryModal").style.display = "flex";
+        }
+
+        function switchToTestingMode() {
+            document.getElementById("bossSummaryModal").style.display = "none";
+            promptTrimetPassword();
+        }
+
+        /* Officer Assignment Handlers */
         function toggleOfficerAssignment(lineKey) {
+            if (isViewerOnly) return;
             const currentOfficer = lineOfficers[lineKey];
             if (currentOfficer) {
-                // Unassign
                 db.ref(`line_officers/${lineKey}`).remove();
             } else {
-                // Prompt Assignment
                 activeLineKeyForOfficer = lineKey;
                 document.getElementById("officerModalTitle").innerText = `Assign Officer to ${lineKey}`;
                 document.getElementById("officerInput").value = "";
@@ -694,21 +691,7 @@
             document.getElementById("officerModal").style.display = "none";
         }
 
-        // Welcome & Boss View Handlers
-        function closeWelcomeModal() {
-            document.getElementById("welcomeModal").style.display = "none";
-        }
-
-        function openBossSummary() {
-            document.getElementById("welcomeModal").style.display = "none";
-            document.getElementById("bossSummaryModal").style.display = "flex";
-        }
-
-        function switchToTestingMode() {
-            document.getElementById("bossSummaryModal").style.display = "none";
-        }
-
-        // Admin Lock Gatekeeper
+        /* Admin Password Protection */
         function requestAdminAccess(actionCallback) {
             if (isAdminAuthenticated) {
                 actionCallback();
@@ -738,7 +721,9 @@
             document.getElementById("adminModal").style.display = "none";
         }
 
+        /* Testing Phone Flow */
         function openCheckModal(id) {
+            if (isViewerOnly) return;
             activePhoneId = id;
             const phone = phones.find(p => p && p.id === id);
             if (!phone) return;
@@ -840,51 +825,63 @@
             document.getElementById("modalPrompt2").style.display = "none";
         }
 
-        function openChangelog() {
-            document.getElementById("changelogModal").style.display = "flex";
-        }
+        function openChangelog() { document.getElementById("changelogModal").style.display = "flex"; }
+        function closeChangelog() { document.getElementById("changelogModal").style.display = "none"; }
+        function openNotepad() { document.getElementById("notepadModal").style.display = "flex"; }
+        function closeNotepad() { document.getElementById("notepadModal").style.display = "none"; }
 
-        function closeChangelog() {
-            document.getElementById("changelogModal").style.display = "none";
-        }
-
-        function openNotepad() {
-            document.getElementById("notepadModal").style.display = "flex";
-        }
-
-        function closeNotepad() {
-            document.getElementById("notepadModal").style.display = "none";
+        /* Confirmation & Reset Routines */
+        function confirmResetAll() {
+            if (confirm("Are you sure you want to reset all phone progress for the week? Current progress will be backed up.")) {
+                resetAll();
+            }
         }
 
         function resetAll() {
-            if (confirm("Are you sure you want to reset all phone statuses? Current progress will be archived as 'Last Week's Summary'.")) {
-                let workingCount = 0;
-                let issueCount = 0;
-                let issuesList = [];
-                const totalPhones = phones.length;
+            let workingCount = 0;
+            let issueCount = 0;
+            let issuesList = [];
+            const totalPhones = phones.length;
 
-                phones.forEach(p => {
-                    if (p.status === "working") workingCount++;
-                    if (p.status === "broken") {
-                        issueCount++;
-                        issuesList.push({
-                            name: p.name,
-                            issue: p.issue || "No description provided",
-                            workOrder: p.workOrder || "N/A"
-                        });
-                    }
-                });
+            // Preserve full phone array snapshot for undo recovery
+            const fullPhoneBackup = JSON.parse(JSON.stringify(phones));
 
-                const archiveData = {
-                    resetDate: new Date().toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }),
-                    workingCount: `${workingCount}/${totalPhones}`,
-                    issueCount: `${issueCount}/${totalPhones}`,
-                    issuesList: issuesList
-                };
+            phones.forEach(p => {
+                if (p.status === "working") workingCount++;
+                if (p.status === "broken") {
+                    issueCount++;
+                    issuesList.push({
+                        name: p.name,
+                        issue: p.issue || "No description provided",
+                        workOrder: p.workOrder || "N/A"
+                    });
+                }
+            });
 
-                lastWeekRef.set(archiveData).then(() => {
-                    phones = buildDefaultPhones();
-                    phonesRef.set(phones);
+            const archiveData = {
+                resetDate: new Date().toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }),
+                workingCount: `${workingCount}/${totalPhones}`,
+                issueCount: `${issueCount}/${totalPhones}`,
+                issuesList: issuesList,
+                fullPhoneBackup: fullPhoneBackup
+            };
+
+            lastWeekRef.set(archiveData).then(() => {
+                phones = buildDefaultPhones();
+                phonesRef.set(phones);
+            });
+        }
+
+        /* Emergency Restore / Undo Function */
+        function undoResetProgress() {
+            if (!lastWeekDataCache || !lastWeekDataCache.fullPhoneBackup) {
+                alert("No previous backup snapshot available to undo!");
+                return;
+            }
+
+            if (confirm("🚨 OH SHIT RECOVERY: Are you sure you want to restore the phone checklist to its pre-reset state?")) {
+                phonesRef.set(lastWeekDataCache.fullPhoneBackup).then(() => {
+                    alert("System successfully restored to previous snapshot!");
                 });
             }
         }
