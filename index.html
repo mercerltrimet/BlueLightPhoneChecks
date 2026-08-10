@@ -196,28 +196,14 @@
                     <h4>🗿 Chad: Summary and statistics</h4>
                     <p>View high-level real-time metrics, system uptime, and active ticket logs.</p>
                 </div>
-                <div class="role-card" style="border-color: #28a745;" onclick="promptTrimetPassword()">
+                <div class="role-card" style="border-color: #28a745;" onclick="enableTrimetInteractiveMode()">
                     <h4 style="color: #28a745;">🚌 TriMet: Edit and test phones</h4>
-                    <p>Full interactive inspection clearance. Requires passkey authorization.</p>
+                    <p>Full interactive inspection clearance.</p>
                 </div>
                 <div class="role-card" style="border-color: #17a2b8;" onclick="enableAlliedViewerMode()">
                     <h4 style="color: #17a2b8;">🛡️ Allied: Viewer mode</h4>
                     <p>Read-only access to track system progress, scroll directories, and inspect active issues.</p>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal 0A: TriMet Password Modal -->
-    <div class="modal" id="trimetAuthModal">
-        <div class="modal-content">
-            <h3>🔑 TriMet Authorization Required</h3>
-            <p>Enter password to unlock edit and testing mode:</p>
-            <input type="password" id="trimetPasswordInput" placeholder="Enter password">
-            <p id="trimetErrorText" style="color: red; font-size: 12px; display: none;">Incorrect password. Hint: trimet</p>
-            <div class="modal-buttons">
-                <button class="btn-secondary" onclick="backToWelcome()">Back</button>
-                <button class="btn-primary" onclick="verifyTrimetPassword()">Login</button>
             </div>
         </div>
     </div>
@@ -328,14 +314,14 @@
         </div>
     </div>
 
-    <!-- Modal 5: Funny Changelog Popup -->
+    <!-- Modal 5: Changelog Popup -->
     <div class="modal" id="changelogModal">
         <div class="modal-content">
             <h3>📜 Patch Notes: "The Panic Button Era"</h3>
             <ul>
                 <li>🦆 **Ducks Fly Together:** Upgraded the Yellow Line color to authentic, eye-searing Oregon Ducks Yellow (`#FEE12B`). Sco Ducks!</li>
                 <li>⚠️ **Emergency Recovery:** Tucked the Undo Reset (Panic Button) cleanly inside the admin reset menu.</li>
-                <li>🔐 **Gatekeeping 101:** Separated users into Chad (Metrics), TriMet (Interactive password `trimet`), and Allied (Look-but-don't-touch).</li>
+                <li>🔓 **Open Access:** Removed password authentication for TriMet mode.</li>
                 <li>👮 **Cop Copity Cop:** Added "Assign Officer" headers so everyone knows who to blame if a platform goes silent.</li>
                 <li>📋 **Copy-Paste Laziness:** Added auto-fill buttons so you don't even have to re-type last week's broken dial tones.</li>
                 <li>🌲 **Dark Green Chic:** Adjusted Green Line styling so it no longer looks like radioactive lime juice.</li>
@@ -367,7 +353,6 @@
 
     <script>
         const ADMIN_PASSWORD = "admin123";
-        const TRIMET_PASSWORD = "trimet";
         
         let isAdminAuthenticated = false;
         let isViewerOnly = false;
@@ -639,27 +624,10 @@
         }
 
         /* Mode Selection Functions */
-        function promptTrimetPassword() {
+        function enableTrimetInteractiveMode() {
+            isViewerOnly = false;
             document.getElementById("welcomeModal").style.display = "none";
-            document.getElementById("trimetPasswordInput").value = "";
-            document.getElementById("trimetErrorText").style.display = "none";
-            document.getElementById("trimetAuthModal").style.display = "flex";
-        }
-
-        function backToWelcome() {
-            document.getElementById("trimetAuthModal").style.display = "none";
-            document.getElementById("welcomeModal").style.display = "flex";
-        }
-
-        function verifyTrimetPassword() {
-            const entered = document.getElementById("trimetPasswordInput").value;
-            if (entered === TRIMET_PASSWORD) {
-                isViewerOnly = false;
-                document.getElementById("trimetAuthModal").style.display = "none";
-                renderPhones();
-            } else {
-                document.getElementById("trimetErrorText").style.display = "block";
-            }
+            renderPhones();
         }
 
         function enableAlliedViewerMode() {
@@ -675,7 +643,7 @@
 
         function switchToTestingMode() {
             document.getElementById("bossSummaryModal").style.display = "none";
-            promptTrimetPassword();
+            enableTrimetInteractiveMode();
         }
 
         /* Officer Assignment Handlers */
