@@ -163,8 +163,9 @@
         <div class="panel">
             <h2>Live Summary Report</h2>
             <div class="summary-box">
-                <p><strong>Total Working Phones:</strong> <span id="workingCount">0/0</span></p>
-                <p><strong>Total Issues Flagged:</strong> <span id="issueCount">0/0</span></p>
+                <p><strong>Total Working Phones:</strong> <span id="workingCount">0/92</span></p>
+                <p><strong>Total Working Intercoms:</strong> <span id="workingIntercomCount">0/3</span></p>
+                <p><strong>Total Issues Flagged:</strong> <span id="issueCount">0/95</span></p>
             </div>
             <h3>Current Issues Log:</h3>
             <ul id="issuesList">
@@ -178,6 +179,7 @@
                 <h3>Last Week's Summary</h3>
                 <p><strong>Last Reset Date:</strong> <span id="lastResetDate">N/A</span></p>
                 <p><strong>Working Phones:</strong> <span id="lastWorkingCount">N/A</span></p>
+                <p><strong>Working Intercoms:</strong> <span id="lastWorkingIntercomCount">N/A</span></p>
                 <p><strong>Issues Flagged:</strong> <span id="lastIssueCount">N/A</span></p>
                 <p><strong>Archived Issues Log:</strong></p>
                 <ul id="lastIssuesList">
@@ -215,8 +217,9 @@
         <div class="modal-content">
             <h3>📈 Real-Time Phone System Overview</h3>
             <div class="summary-box" style="background: #eaf2ff; border: 1px solid #b8d5ff;">
-                <p style="font-size: 16px; margin: 6px 0;"><strong>Total Working Phones:</strong> <span id="bossWorkingCount" style="color: #28a745; font-weight: bold;">0/0</span></p>
-                <p style="font-size: 16px; margin: 6px 0;"><strong>Total Flagged Issues:</strong> <span id="bossIssueCount" style="color: #dc3545; font-weight: bold;">0/0</span></p>
+                <p style="font-size: 16px; margin: 6px 0;"><strong>Total Working Phones:</strong> <span id="bossWorkingCount" style="color: #28a745; font-weight: bold;">0/92</span></p>
+                <p style="font-size: 16px; margin: 6px 0;"><strong>Total Working Intercoms:</strong> <span id="bossWorkingIntercomCount" style="color: #8e44ad; font-weight: bold;">0/3</span></p>
+                <p style="font-size: 16px; margin: 6px 0;"><strong>Total Flagged Issues:</strong> <span id="bossIssueCount" style="color: #dc3545; font-weight: bold;">0/95</span></p>
             </div>
             <h4>Active Flagged Issues Log:</h4>
             <ul id="bossIssuesList" style="max-height: 35vh;">
@@ -233,7 +236,7 @@
         <div class="modal-content">
             <button class="btn-modal-top-reset" onclick="requestAdminAccess(resetSinglePhone)">🔒 Reset</button>
             <h3 id="modalPhoneTitle">Phone Check</h3>
-            <p>Is the phone working correctly?</p>
+            <p>Is the device working correctly?</p>
             <div class="modal-buttons">
                 <button class="btn-yes" onclick="handleYes()">Yes</button>
                 <button class="btn-no" onclick="handleNoPrompt()">No</button>
@@ -258,7 +261,7 @@
                 <button id="btnCopyLastWeek" class="btn-copy-data btn-copy-last" style="display:none;" onclick="copyLastWeekData()">📋 Copy from Last Week</button>
             </div>
 
-            <p>What is wrong with this phone?</p>
+            <p>What is wrong with this device?</p>
             <input type="text" id="issueDescription" placeholder="e.g., No dial tone, static on line">
             
             <p>Need to create a ticket? <a href="https://trimet.atlassian.net/servicedesk/customer/portal/9/group/1051/create/136" target="_blank" style="color: #007bff;">Click here to place a work order</a></p>
@@ -321,10 +324,10 @@
         <div class="modal-content">
             <h3>📜 Patch Notes</h3>
             <ul>
-                <li>🔊 **Intercom Header:** Added 🔊 Intercom 🔊 section styled in purple, featuring Elmonica, 122nd, and 148th.</li>
+                <li>🔊 **Intercom Separation:** Tracked 92 Phones and 3 Intercoms separately in summaries.</li>
+                <li>🔊 **Intercom Header:** Added 🔊 Intercom 🔊 section styled in purple.</li>
                 <li>🦆 **Ducks Yellow:** Upgraded Yellow Line color (`#FEE12B`).</li>
                 <li>⚠️ **Emergency Recovery:** Undo reset button integrated in admin menu.</li>
-                <li>🔓 **Open Access:** Fast access for TriMet testing mode.</li>
             </ul>
             <div class="modal-buttons">
                 <button class="btn-primary" onclick="closeChangelog()">Close & Resume Checking</button>
@@ -504,7 +507,6 @@
             const val = snapshot.val();
             let parsedData = Array.isArray(val) ? val : (val ? Object.values(val) : []);
             
-            // Re-sync default state if database format is legacy or missing the new items
             if (!parsedData || parsedData.length === 0 || !parsedData[0] || !parsedData[0].line || parsedData.length < rawPhoneData.length) {
                 phones = buildDefaultPhones();
                 phonesRef.set(phones);
@@ -524,8 +526,9 @@
             lastWeekDataCache = data;
             if (data) {
                 document.getElementById("lastResetDate").innerText = data.resetDate || "N/A";
-                document.getElementById("lastWorkingCount").innerText = data.workingCount || "0/0";
-                document.getElementById("lastIssueCount").innerText = data.issueCount || "0/0";
+                document.getElementById("lastWorkingCount").innerText = data.workingCount || "0/92";
+                document.getElementById("lastWorkingIntercomCount").innerText = data.workingIntercomCount || "0/3";
+                document.getElementById("lastIssueCount").innerText = data.issueCount || "0/95";
                 
                 let archiveIssuesHTML = "";
                 if (data.issuesList && data.issuesList.length > 0) {
@@ -553,10 +556,14 @@
             const container = document.getElementById("linesContainer");
             container.innerHTML = "";
             
-            let workingCount = 0;
+            let workingPhoneCount = 0;
+            let workingIntercomCount = 0;
             let issueCount = 0;
             let issuesHTML = "";
-            const totalPhones = phones.length;
+
+            const totalPhones = 92;
+            const totalIntercoms = 3;
+            const totalDevices = totalPhones + totalIntercoms;
 
             lineCategories.forEach(category => {
                 const categoryPhones = phones.filter(p => p && p.line === category.key);
@@ -597,10 +604,16 @@
                     card.className = "phone-card";
                     card.innerText = phone.name;
                     
+                    const isIntercom = (phone.line === "Intercom");
+
                     if (phone.status === "working") {
                         card.classList.add("status-green");
                         card.removeAttribute("title");
-                        workingCount++;
+                        if (isIntercom) {
+                            workingIntercomCount++;
+                        } else {
+                            workingPhoneCount++;
+                        }
                     } else if (phone.status === "broken") {
                         card.classList.add("status-red");
                         card.title = `Issue: ${phone.issue || 'No description'}\nWork Order: ${phone.workOrder || 'N/A'}`;
@@ -622,12 +635,14 @@
                 container.appendChild(section);
             });
 
-            document.getElementById("workingCount").innerText = `${workingCount}/${totalPhones}`;
-            document.getElementById("issueCount").innerText = `${issueCount}/${totalPhones}`;
+            document.getElementById("workingCount").innerText = `${workingPhoneCount}/${totalPhones}`;
+            document.getElementById("workingIntercomCount").innerText = `${workingIntercomCount}/${totalIntercoms}`;
+            document.getElementById("issueCount").innerText = `${issueCount}/${totalDevices}`;
             document.getElementById("issuesList").innerHTML = issuesHTML || "<li><em>No issues reported yet.</em></li>";
 
-            document.getElementById("bossWorkingCount").innerText = `${workingCount}/${totalPhones}`;
-            document.getElementById("bossIssueCount").innerText = `${issueCount}/${totalPhones}`;
+            document.getElementById("bossWorkingCount").innerText = `${workingPhoneCount}/${totalPhones}`;
+            document.getElementById("bossWorkingIntercomCount").innerText = `${workingIntercomCount}/${totalIntercoms}`;
+            document.getElementById("bossIssueCount").innerText = `${issueCount}/${totalDevices}`;
             document.getElementById("bossIssuesList").innerHTML = issuesHTML || "<li><em>No active issues reported. All systems optimal!</em></li>";
         }
 
@@ -765,7 +780,7 @@
                 copyLastBtn.dataset.issue = matchedLastWeekItem.issue;
                 copyLastBtn.dataset.workorder = matchedLastWeekItem.workOrder;
             } else {
-                lastInfoText.innerHTML = `✅ <em>No issues flagged for this phone last week.</em>`;
+                lastInfoText.innerHTML = `✅ <em>No issues flagged for this device last week.</em>`;
                 copyLastBtn.style.display = "none";
             }
 
@@ -830,22 +845,30 @@
         }
 
         function confirmResetAll() {
-            if (confirm("Are you sure you want to reset all phone progress for the week? Current progress will be backed up.")) {
+            if (confirm("Are you sure you want to reset all progress for the week? Current progress will be backed up.")) {
                 resetAll();
                 closeResetMenu();
             }
         }
 
         function resetAll() {
-            let workingCount = 0;
+            let workingPhoneCount = 0;
+            let workingIntercomCount = 0;
             let issueCount = 0;
             let issuesList = [];
-            const totalPhones = phones.length;
+
+            const totalPhones = 92;
+            const totalIntercoms = 3;
+            const totalDevices = totalPhones + totalIntercoms;
 
             const fullPhoneBackup = JSON.parse(JSON.stringify(phones));
 
             phones.forEach(p => {
-                if (p.status === "working") workingCount++;
+                const isIntercom = (p.line === "Intercom");
+                if (p.status === "working") {
+                    if (isIntercom) workingIntercomCount++;
+                    else workingPhoneCount++;
+                }
                 if (p.status === "broken") {
                     issueCount++;
                     issuesList.push({
@@ -858,8 +881,9 @@
 
             const archiveData = {
                 resetDate: new Date().toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }),
-                workingCount: `${workingCount}/${totalPhones}`,
-                issueCount: `${issueCount}/${totalPhones}`,
+                workingCount: `${workingPhoneCount}/${totalPhones}`,
+                workingIntercomCount: `${workingIntercomCount}/${totalIntercoms}`,
+                issueCount: `${issueCount}/${totalDevices}`,
                 issuesList: issuesList,
                 fullPhoneBackup: fullPhoneBackup
             };
@@ -876,7 +900,7 @@
                 return;
             }
 
-            if (confirm("⚠️ PANIC RESTORE: Are you sure you want to restore the phone checklist to its pre-reset state?")) {
+            if (confirm("⚠️ PANIC RESTORE: Are you sure you want to restore the checklist to its pre-reset state?")) {
                 phonesRef.set(lastWeekDataCache.fullPhoneBackup).then(() => {
                     alert("System successfully restored to previous snapshot!");
                     closeResetMenu();
