@@ -4,21 +4,66 @@
     <meta charset="UTF-8">
     <title>Weekly Phone System Check</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f4f4f9; color: #333; }
+        :root {
+            --bg-color: #f4f4f9;
+            --panel-bg: #ffffff;
+            --text-color: #333333;
+            --subtext-color: #666666;
+            --border-color: #e0e0e0;
+            --section-bg: #fafafa;
+            --summary-bg: #e9ecef;
+            --archive-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --card-hover: #f0f0f0;
+            --modal-bg: #ffffff;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --panel-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --subtext-color: #aaaaaa;
+            --border-color: #333333;
+            --section-bg: #252525;
+            --summary-bg: #2a2a2a;
+            --archive-bg: #252525;
+            --card-bg: #2c2c2c;
+            --card-hover: #3a3a3a;
+            --modal-bg: #242424;
+        }
+
+        body { font-family: Arial, sans-serif; margin: 30px; background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.3s, color 0.3s; }
         
-        /* Header & Logo Layout */
-        .header-container { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        /* Header Layout & Dark Mode Toggle */
+        .header-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .header-left { display: flex; align-items: center; gap: 15px; }
         .trimet-logo { height: 45px; width: 45px; flex-shrink: 0; }
-        .header-text h1 { margin: 0; color: #2c3e50; font-size: 28px; }
-        .header-text p { margin: 4px 0 0 0; color: #666; font-size: 14px; }
+        .header-text h1 { margin: 0; color: var(--text-color); font-size: 28px; }
+        .header-text p { margin: 4px 0 0 0; color: var(--subtext-color); font-size: 14px; }
+
+        .btn-theme-toggle {
+            background: var(--panel-bg);
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .btn-theme-toggle:hover { transform: scale(1.05); }
 
         .container { display: flex; gap: 30px; }
-        .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); flex: 1; }
-        h2 { color: #2c3e50; margin-top: 0; }
+        .panel { background: var(--panel-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); flex: 1; transition: background-color 0.3s; }
+        h2, h3 { color: var(--text-color); margin-top: 0; }
         
         /* Line Section Styling */
         .lines-container { max-height: 75vh; overflow-y: auto; padding-right: 10px; }
-        .line-section { margin-bottom: 25px; border-radius: 8px; padding: 15px; background: #fafafa; border: 1px solid #e0e0e0; }
+        .line-section { margin-bottom: 25px; border-radius: 8px; padding: 15px; background: var(--section-bg); border: 1px solid var(--border-color); }
         .line-header { 
             font-size: 18px; font-weight: bold; padding: 10px 14px; border-radius: 6px; margin-bottom: 12px; 
             display: flex; align-items: center; justify-content: space-between; color: white; 
@@ -50,16 +95,16 @@
         /* Phone Grid */
         .phone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
         .phone-card { 
-            padding: 12px; border: 2px solid #ccc; border-radius: 6px; text-align: center; 
-            cursor: pointer; background: #fff; font-weight: bold; font-size: 13px; transition: 0.2s; 
+            padding: 12px; border: 2px solid var(--border-color); border-radius: 6px; text-align: center; 
+            cursor: pointer; background: var(--card-bg); color: var(--text-color); font-weight: bold; font-size: 13px; transition: 0.2s; 
         }
-        .phone-card:hover { background: #f0f0f0; }
-        .status-green { background-color: #d4edda !important; border-color: #28a745 !important; color: #155724; }
-        .status-red { background-color: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; }
+        .phone-card:hover { background: var(--card-hover); }
+        .status-green { background-color: #d4edda !important; border-color: #28a745 !important; color: #155724 !important; }
+        .status-red { background-color: #f8d7da !important; border-color: #dc3545 !important; color: #721c24 !important; }
 
         /* Summary Section */
-        .summary-box { margin-top: 15px; padding: 10px; background: #e9ecef; border-radius: 5px; }
-        .archive-box { margin-top: 25px; padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; }
+        .summary-box { margin-top: 15px; padding: 10px; background: var(--summary-bg); border-radius: 5px; }
+        .archive-box { margin-top: 25px; padding: 15px; background: var(--archive-bg); border: 1px solid var(--border-color); border-radius: 6px; }
         ul { padding-left: 20px; max-height: 25vh; overflow-y: auto; }
 
         /* Controls & Header Action Buttons */
@@ -83,7 +128,7 @@
 
         /* Modal Overlay & Backdrop */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 100; }
-        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 480px; box-shadow: 0 6px 15px rgba(0,0,0,0.3); position: relative; }
+        .modal-content { background: var(--modal-bg); color: var(--text-color); padding: 25px; border-radius: 8px; width: 480px; box-shadow: 0 6px 15px rgba(0,0,0,0.3); position: relative; border: 1px solid var(--border-color); }
         .modal-buttons { margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; }
         button { padding: 10px 16px; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; }
         .btn-yes { background: #28a745; color: white; }
@@ -92,7 +137,6 @@
         .btn-secondary { background: #6c757d; color: white; }
         .btn-warning { background: #ffc107; color: #212529; }
         
-        /* Top-Right Reset Button Styling */
         .btn-modal-top-reset {
             position: absolute;
             top: 15px;
@@ -111,7 +155,7 @@
 
         /* Reference Cards */
         .reference-card { border-radius: 6px; padding: 10px; margin-bottom: 12px; font-size: 13px; }
-        .last-week-card { background-color: #f1f3f5; border: 1px dashed #adb5bd; }
+        .last-week-card { background-color: var(--summary-bg); border: 1px dashed var(--border-color); }
         .current-issue-card { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
         .btn-copy-data { color: white; font-size: 11px; padding: 4px 8px; margin-top: 6px; border-radius: 3px; }
         .btn-copy-last { background-color: #17a2b8; }
@@ -119,15 +163,15 @@
         .btn-copy-active { background-color: #dc3545; }
         .btn-copy-active:hover { background-color: #c82333; }
 
-        input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        textarea { width: 100%; height: 180px; padding: 10px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 14px; resize: vertical; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid var(--border-color); background: var(--panel-bg); color: var(--text-color); border-radius: 4px; }
+        textarea { width: 100%; height: 180px; padding: 10px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid var(--border-color); background: var(--panel-bg); color: var(--text-color); border-radius: 4px; font-family: inherit; font-size: 14px; resize: vertical; }
 
         /* Role Cards */
         .role-selection-box { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
-        .role-card { background: #f8f9fa; border: 2px solid #007bff; border-radius: 8px; padding: 16px; cursor: pointer; transition: 0.2s; text-align: left; }
-        .role-card:hover { background: #e7f1ff; transform: translateY(-2px); }
+        .role-card { background: var(--section-bg); border: 2px solid #007bff; border-radius: 8px; padding: 16px; cursor: pointer; transition: 0.2s; text-align: left; }
+        .role-card:hover { transform: translateY(-2px); opacity: 0.9; }
         .role-card h4 { margin: 0 0 6px 0; color: #007bff; font-size: 18px; }
-        .role-card p { margin: 0; font-size: 14px; color: #555; }
+        .role-card p { margin: 0; font-size: 14px; color: var(--subtext-color); }
 
         /* Floating Action Buttons */
         .floating-buttons { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 99; }
@@ -142,16 +186,21 @@
 <body>
 
     <div class="header-container">
-        <svg class="trimet-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <rect width="100" height="100" rx="20" fill="#D84A26"/>
-            <path d="M50 20 C33.4 20 20 33.4 20 50 C20 66.6 33.4 80 50 80 C66.6 80 80 66.6 80 50 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-            <path d="M35 38 C43.3 26 56.7 26 65 38 C73.3 50 67 65 50 65 C33 65 26.7 50 35 38 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-            <path d="M65 62 C56.7 74 43.3 74 35 62 C26.7 50 33 35 50 35 C67 35 73.3 50 65 62 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-        </svg>
-        <div class="header-text">
-            <h1>Weekly Phone System Check</h1>
-            <p>Click on a phone name below to begin its inspection check.</p>
+        <div class="header-left">
+            <svg class="trimet-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100" height="100" rx="20" fill="#D84A26"/>
+                <path d="M50 20 C33.4 20 20 33.4 20 50 C20 66.6 33.4 80 50 80 C66.6 80 80 66.6 80 50 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+                <path d="M35 38 C43.3 26 56.7 26 65 38 C73.3 50 67 65 50 65 C33 65 26.7 50 35 38 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+                <path d="M65 62 C56.7 74 43.3 74 35 62 C26.7 50 33 35 50 35 C67 35 73.3 50 65 62 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+            </svg>
+            <div class="header-text">
+                <h1>Weekly Phone System Check</h1>
+                <p>Click on a phone name below to begin its inspection check.</p>
+            </div>
         </div>
+        <button class="btn-theme-toggle" onclick="toggleDarkMode()">
+            <span id="themeIcon">🌙</span> <span id="themeText">Dark Mode</span>
+        </button>
     </div>
 
     <div class="container">
@@ -189,7 +238,7 @@
         </div>
     </div>
 
-    <!-- Modal 0: Initial Welcome -->
+    <!-- Modal 0: Welcome -->
     <div class="modal" id="welcomeModal" style="display: flex;">
         <div class="modal-content" style="width: 540px;">
             <h3>👋 Welcome to Phone System Check</h3>
@@ -216,7 +265,7 @@
     <div class="modal" id="bossSummaryModal">
         <div class="modal-content">
             <h3>📈 Real-Time Phone System Overview</h3>
-            <div class="summary-box" style="background: #eaf2ff; border: 1px solid #b8d5ff;">
+            <div class="summary-box" style="border: 1px solid #b8d5ff;">
                 <p style="font-size: 16px; margin: 6px 0;"><strong>Total Working Phones:</strong> <span id="bossWorkingCount" style="color: #28a745; font-weight: bold;">0/92</span></p>
                 <p style="font-size: 16px; margin: 6px 0;"><strong>Total Working Intercoms:</strong> <span id="bossWorkingIntercomCount" style="color: #8e44ad; font-weight: bold;">0/3</span></p>
                 <p style="font-size: 16px; margin: 6px 0;"><strong>Total Flagged Issues:</strong> <span id="bossIssueCount" style="color: #dc3545; font-weight: bold;">0/95</span></p>
@@ -257,7 +306,7 @@
 
             <div class="reference-card last-week-card">
                 <strong>Last Week's Status:</strong>
-                <div id="lastWeekInfoText" style="margin-top: 4px; color: #555;">Checking history...</div>
+                <div id="lastWeekInfoText" style="margin-top: 4px; opacity: 0.8;">Checking history...</div>
                 <button id="btnCopyLastWeek" class="btn-copy-data btn-copy-last" style="display:none;" onclick="copyLastWeekData()">📋 Copy from Last Week</button>
             </div>
 
@@ -324,10 +373,10 @@
         <div class="modal-content">
             <h3>📜 Patch Notes</h3>
             <ul>
+                <li>🌙 **Dark Mode Toggle:** Added non-destructive Dark Mode saved via local settings.</li>
                 <li>🔊 **Intercom Separation:** Tracked 92 Phones and 3 Intercoms separately in summaries.</li>
                 <li>🔊 **Intercom Header:** Added 🔊 Intercom 🔊 section styled in purple.</li>
                 <li>🦆 **Ducks Yellow:** Upgraded Yellow Line color (`#FEE12B`).</li>
-                <li>⚠️ **Emergency Recovery:** Undo reset button integrated in admin menu.</li>
             </ul>
             <div class="modal-buttons">
                 <button class="btn-primary" onclick="closeChangelog()">Close & Resume Checking</button>
@@ -339,7 +388,7 @@
     <div class="modal" id="notepadModal">
         <div class="modal-content" style="width: 500px;">
             <h3>🚨 Help! Computers Are Possessed By Demons</h3>
-            <p style="font-size: 13px; color: #666;">Shared live notepad. Type your IT complaints below:</p>
+            <p style="font-size: 13px; opacity: 0.8;">Shared live notepad. Type your IT complaints below:</p>
             <textarea id="sharedNotepadArea" placeholder="Type IT grievances, rants, or tech support cries for help here... (Auto-saves live)"></textarea>
             <div class="modal-buttons">
                 <button class="btn-primary" onclick="closeNotepad()">Close Notepad</button>
@@ -360,6 +409,25 @@
         let isAdminAuthenticated = false;
         let isViewerOnly = false;
         let pendingAdminAction = null;
+
+        /* Dark Mode Persistence */
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeUI(isDark);
+        }
+
+        function updateThemeUI(isDark) {
+            document.getElementById('themeIcon').innerText = isDark ? '☀️' : '🌙';
+            document.getElementById('themeText').innerText = isDark ? 'Light Mode' : 'Dark Mode';
+        }
+
+        // Load theme preference on start
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            updateThemeUI(true);
+        }
 
         const firebaseConfig = {
             apiKey: "AIzaSyBGJMagjXti25kZZ27v76IPoQSAVnPoJ6E",
