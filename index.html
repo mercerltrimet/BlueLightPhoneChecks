@@ -30,7 +30,7 @@
             padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: normal; 
         }
         
-        /* Line Colors - Ducks Yellow Updated (#FEE12B) */
+        /* Line Colors */
         .bg-blue { background-color: #2b70c9; }
         .bg-yellow { background-color: #FEE12B; color: #111; }
         .bg-green { background-color: #1e5631; color: #ffffff; }
@@ -122,7 +122,7 @@
         input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
         textarea { width: 100%; height: 180px; padding: 10px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 14px; resize: vertical; }
 
-        /* Larger Welcome Screen Role Cards */
+        /* Role Cards */
         .role-selection-box { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
         .role-card { background: #f8f9fa; border: 2px solid #007bff; border-radius: 8px; padding: 16px; cursor: pointer; transition: 0.2s; text-align: left; }
         .role-card:hover { background: #e7f1ff; transform: translateY(-2px); }
@@ -187,7 +187,7 @@
         </div>
     </div>
 
-    <!-- Modal 0: Initial Welcome / Expanded 3-Mode Selection -->
+    <!-- Modal 0: Initial Welcome -->
     <div class="modal" id="welcomeModal" style="display: flex;">
         <div class="modal-content" style="width: 540px;">
             <h3>👋 Welcome to Phone System Check</h3>
@@ -287,7 +287,7 @@
         </div>
     </div>
 
-    <!-- Modal 3B: Reset & Panic Restore Control Menu -->
+    <!-- Modal 3B: Reset & Recovery Menu -->
     <div class="modal" id="resetControlModal">
         <div class="modal-content">
             <h3>⚙️ Weekly Reset & Recovery Controls</h3>
@@ -319,14 +319,12 @@
     <!-- Modal 5: Changelog Popup -->
     <div class="modal" id="changelogModal">
         <div class="modal-content">
-            <h3>📜 Patch Notes: "The Panic Button Era"</h3>
+            <h3>📜 Patch Notes</h3>
             <ul>
-                <li>🦆 **Ducks Fly Together:** Upgraded the Yellow Line color to authentic, eye-searing Oregon Ducks Yellow (`#FEE12B`). Sco Ducks!</li>
-                <li>⚠️ **Emergency Recovery:** Tucked the Undo Reset (Panic Button) cleanly inside the admin reset menu.</li>
-                <li>🔓 **Open Access:** Removed password authentication for TriMet mode.</li>
-                <li>👮 **Cop Copity Cop:** Added "Assign Officer" headers so everyone knows who to blame if a platform goes silent.</li>
-                <li>📋 **Copy-Paste Laziness:** Added auto-fill buttons so you don't even have to re-type last week's broken dial tones.</li>
-                <li>🌲 **Dark Green Chic:** Adjusted Green Line styling so it no longer looks like radioactive lime juice.</li>
+                <li>🔊 **Intercom Header:** Added 🔊 Intercom 🔊 section styled in purple, featuring Elmonica, 122nd, and 148th.</li>
+                <li>🦆 **Ducks Yellow:** Upgraded Yellow Line color (`#FEE12B`).</li>
+                <li>⚠️ **Emergency Recovery:** Undo reset button integrated in admin menu.</li>
+                <li>🔓 **Open Access:** Fast access for TriMet testing mode.</li>
             </ul>
             <div class="modal-buttons">
                 <button class="btn-primary" onclick="closeChangelog()">Close & Resume Checking</button>
@@ -505,7 +503,9 @@
         phonesRef.on('value', (snapshot) => {
             const val = snapshot.val();
             let parsedData = Array.isArray(val) ? val : (val ? Object.values(val) : []);
-            if (!parsedData || parsedData.length === 0 || !parsedData[0] || !parsedData[0].line) {
+            
+            // Re-sync default state if database format is legacy or missing the new items
+            if (!parsedData || parsedData.length === 0 || !parsedData[0] || !parsedData[0].line || parsedData.length < rawPhoneData.length) {
                 phones = buildDefaultPhones();
                 phonesRef.set(phones);
             } else {
