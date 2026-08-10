@@ -23,8 +23,8 @@
         
         /* Line Colors */
         .bg-blue { background-color: #2b70c9; }
-        .bg-yellow { background-color: #FEE11A; color: #111; } /* Oregon Ducks Yellow */
-        .bg-green { background-color: #1e5631; color: #ffffff; } /* Dark Forest Green */
+        .bg-yellow { background-color: #FEE11A; color: #111; }
+        .bg-green { background-color: #1e5631; color: #ffffff; }
         .bg-orange { background-color: #e67e22; }
         .bg-red { background-color: #d9534f; }
         .bg-misc { background-color: #7f8c8d; }
@@ -55,11 +55,10 @@
         .controls { margin-top: 15px; display: flex; justify-content: flex-end; }
         .btn-reset { background-color: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-reset:hover { background-color: #5a6268; }
-        .btn-undo { background-color: #ffc107; color: #212529; }
 
         /* Modal Overlay & Backdrop */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 100; }
-        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 450px; box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
+        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 450px; box-shadow: 0 6px 15px rgba(0,0,0,0.3); position: relative; }
         .modal-buttons { margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; }
         button { padding: 10px 16px; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; }
         .btn-yes { background: #28a745; color: white; }
@@ -67,6 +66,42 @@
         .btn-primary { background: #007bff; color: white; }
         .btn-secondary { background: #6c757d; color: white; }
         
+        /* Top-Right Reset Button Styling */
+        .btn-modal-top-reset {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #ffc107;
+            color: #212529;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-modal-top-reset:hover { background-color: #e0a800; }
+
+        /* Last Week Preview Container in Report Modal */
+        .last-week-card {
+            background-color: #f1f3f5;
+            border: 1px dashed #adb5bd;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+        .btn-copy-last-week {
+            background-color: #17a2b8;
+            color: white;
+            font-size: 11px;
+            padding: 4px 8px;
+            margin-top: 6px;
+            border-radius: 3px;
+        }
+        .btn-copy-last-week:hover { background-color: #138496; }
+
         input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
         textarea { width: 100%; height: 180px; padding: 10px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 14px; resize: vertical; }
 
@@ -203,12 +238,12 @@
     <!-- Modal 1: Working Prompt -->
     <div class="modal" id="modalPrompt1">
         <div class="modal-content">
+            <button class="btn-modal-top-reset" onclick="requestAdminAccess(resetSinglePhone)">🔒 Reset</button>
             <h3 id="modalPhoneTitle">Phone Check</h3>
             <p>Is the phone working correctly?</p>
             <div class="modal-buttons">
                 <button class="btn-yes" onclick="handleYes()">Yes</button>
                 <button class="btn-no" onclick="handleNoPrompt()">No</button>
-                <button class="btn-undo" onclick="requestAdminAccess(resetSinglePhone)">🔒 Reset This Phone</button>
             </div>
         </div>
     </div>
@@ -217,6 +252,14 @@
     <div class="modal" id="modalPrompt2">
         <div class="modal-content">
             <h3>Report Issue</h3>
+            
+            <!-- Last Week Reference Box -->
+            <div class="last-week-card">
+                <strong>Last Week's Status:</strong>
+                <div id="lastWeekInfoText" style="margin-top: 4px; color: #555;">Checking history...</div>
+                <button id="btnCopyLastWeek" class="btn-copy-last-week" style="display:none;" onclick="copyLastWeekData()">📋 Copy from Last Week</button>
+            </div>
+
             <p>What is wrong with this phone?</p>
             <input type="text" id="issueDescription" placeholder="e.g., No dial tone, static on line">
             
@@ -250,16 +293,15 @@
         <div class="modal-content">
             <h3>📜 Patch Notes & Updates</h3>
             <ul>
+                <li>📌 Shifted reset button inside modal to top-right corner</li>
+                <li>📋 Added last week's issue info & auto-copy button inside issue dialog</li>
+                <li>💬 Added hover tooltips over red flagged phone cards showing active issues</li>
                 <li>📊 Added role selection modal featuring Chad Mode vs. Non-Chad Mode</li>
-                <li>🛑 Added admin protected reset button... stop resetting it please</li>
+                <li>🛑 Added admin protected reset button</li>
                 <li>🦆 Changed yellow to be Oregon Ducks-colored</li>
                 <li>🌲 Made the green line a darker shade of green</li>
-                <li>🤓 Reordered the trains to be in order</li>
                 <li>🚂 Added train emojis</li>
-                <li>🎨 Made the colors pretty</li>
-                <li>📋 Added a previous week thing to make sure there is no duplicates</li>
                 <li>🚨 Added a shared notepad for possessed computers</li>
-                <li>🔒 Added admin password lock for resetting phones & full week progress</li>
             </ul>
             <div class="modal-buttons">
                 <button class="btn-primary" onclick="closeChangelog()">Close & Resume Checking Phones</button>
@@ -271,7 +313,7 @@
     <div class="modal" id="notepadModal">
         <div class="modal-content" style="width: 500px;">
             <h3>🚨 Help! Computers Are Possessed By Demons</h3>
-            <p style="font-size: 13px; color: #666;">Shared live notepad. Anyone can write whatever they want here. Type your IT complaints or summoning rituals below:</p>
+            <p style="font-size: 13px; color: #666;">Shared live notepad. Type your IT complaints below:</p>
             <textarea id="sharedNotepadArea" placeholder="Type IT grievances, rants, or tech support cries for help here... (Auto-saves live)"></textarea>
             <div class="modal-buttons">
                 <button class="btn-primary" onclick="closeNotepad()">Close Notepad</button>
@@ -287,12 +329,10 @@
     </div>
 
     <script>
-        // CONFIGURATION: Set your admin password here!
         const ADMIN_PASSWORD = "admin123";
         let isAdminAuthenticated = false;
         let pendingAdminAction = null;
 
-        // Firebase Configuration Keys
         const firebaseConfig = {
             apiKey: "AIzaSyBGJMagjXti25kZZ27v76IPoQSAVnPoJ6E",
             authDomain: "blp-checks.firebaseapp.com",
@@ -303,14 +343,12 @@
             appId: "1:526043634080:web:1d53a9cadc601e38fdacc5"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         const phonesRef = db.ref('weekly_phone_check');
         const lastWeekRef = db.ref('last_week_summary');
         const notepadRef = db.ref('shared_it_notepad');
 
-        // Line categories matching order and colors
         const lineCategories = [
             { key: "Blue Line", title: "Blue Line", bgClass: "bg-blue", borderClass: "line-blue" },
             { key: "Yellow Line", title: "Yellow Line", bgClass: "bg-yellow", borderClass: "line-yellow" },
@@ -320,7 +358,6 @@
             { key: "Miscellaneous", title: "Miscellaneous", bgClass: "bg-misc", borderClass: "line-misc" }
         ];
 
-        // Master Raw Data
         const rawPhoneData = [
             // Blue Line
             { line: "Blue Line", name: "Hillsboro TC EB", id: "1864" },
@@ -439,6 +476,7 @@
         }
 
         let phones = buildDefaultPhones();
+        let lastWeekDataCache = null;
         let activePhoneId = null;
 
         // Firebase Listener: Active Phones
@@ -464,6 +502,7 @@
         // Firebase Listener: Last Week Summary Archive
         lastWeekRef.on('value', (snapshot) => {
             const data = snapshot.val();
+            lastWeekDataCache = data;
             if (data) {
                 document.getElementById("lastResetDate").innerText = data.resetDate || "N/A";
                 document.getElementById("lastWorkingCount").innerText = data.workingCount || "0/0";
@@ -523,11 +562,16 @@
                     
                     if (phone.status === "working") {
                         card.classList.add("status-green");
+                        card.removeAttribute("title");
                         workingCount++;
                     } else if (phone.status === "broken") {
                         card.classList.add("status-red");
+                        // Tooltip on Hover for Red Boxes
+                        card.title = `Issue: ${phone.issue || 'No description'}\nWork Order: ${phone.workOrder || 'N/A'}`;
                         issueCount++;
                         issuesHTML += `<li><strong>${phone.name}</strong>: ${phone.issue} (Work Order: ${phone.workOrder || 'None'})</li>`;
+                    } else {
+                        card.removeAttribute("title");
                     }
 
                     card.onclick = () => openCheckModal(phone.id);
@@ -616,7 +660,36 @@
             document.getElementById("modalPrompt1").style.display = "none";
             document.getElementById("issueDescription").value = "";
             document.getElementById("workOrderInput").value = "";
+
+            // Populate Last Week Reference inside Modal 2
+            const phone = phones.find(p => p && p.id === activePhoneId);
+            const copyBtn = document.getElementById("btnCopyLastWeek");
+            const infoText = document.getElementById("lastWeekInfoText");
+
+            let matchedLastWeekItem = null;
+            if (lastWeekDataCache && lastWeekDataCache.issuesList) {
+                matchedLastWeekItem = lastWeekDataCache.issuesList.find(item => item.name === phone.name);
+            }
+
+            if (matchedLastWeekItem) {
+                infoText.innerHTML = `⚠️ <strong>Issue:</strong> ${matchedLastWeekItem.issue}<br>🎫 <strong>Work Order:</strong> ${matchedLastWeekItem.workOrder}`;
+                copyBtn.style.display = "inline-block";
+                copyBtn.dataset.issue = matchedLastWeekItem.issue;
+                copyBtn.dataset.workorder = matchedLastWeekItem.workOrder;
+            } else {
+                infoText.innerHTML = `✅ <em>No issues flagged for this phone last week.</em>`;
+                copyBtn.style.display = "none";
+            }
+
             document.getElementById("modalPrompt2").style.display = "flex";
+        }
+
+        function copyLastWeekData() {
+            const copyBtn = document.getElementById("btnCopyLastWeek");
+            if (copyBtn.dataset.issue) {
+                document.getElementById("issueDescription").value = copyBtn.dataset.issue;
+                document.getElementById("workOrderInput").value = copyBtn.dataset.workorder;
+            }
         }
 
         function resetSinglePhone() {
