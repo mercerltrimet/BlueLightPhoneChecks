@@ -64,8 +64,6 @@
         .controls { margin-top: 15px; display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
         .btn-reset { background-color: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-reset:hover { background-color: #5a6268; }
-        .btn-undo { background-color: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn-undo:hover { background-color: #bd2130; }
 
         .btn-officer {
             background-color: rgba(255, 255, 255, 0.9);
@@ -90,6 +88,7 @@
         .btn-no { background: #dc3545; color: white; }
         .btn-primary { background: #007bff; color: white; }
         .btn-secondary { background: #6c757d; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
         
         /* Top-Right Reset Button Styling */
         .btn-modal-top-reset {
@@ -170,8 +169,7 @@
                 <li><em>No issues reported yet.</em></li>
             </ul>
             <div class="controls">
-                <button class="btn-undo" onclick="requestAdminAccess(undoResetProgress)">🚨 OH SHIT (Undo Reset)</button>
-                <button class="btn-reset" onclick="requestAdminAccess(confirmResetAll)">🔒 Reset Weekly Progress (Admin)</button>
+                <button class="btn-reset" onclick="requestAdminAccess(openResetMenu)">🔒 Reset Weekly Progress (Admin)</button>
             </div>
 
             <div class="archive-box">
@@ -301,6 +299,22 @@
         </div>
     </div>
 
+    <!-- Modal 3B: Reset & Panic Restore Control Menu -->
+    <div class="modal" id="resetControlModal">
+        <div class="modal-content">
+            <h3>⚙️ Weekly Reset & Recovery Controls</h3>
+            <p>Select an action below:</p>
+            <div style="background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 12px; border-radius: 6px; font-size: 13px; margin-bottom: 15px;">
+                <strong>Note:</strong> Resetting creates a new backup of your current check data before wiping the live checklist.
+            </div>
+            <div class="modal-buttons" style="flex-direction: column; gap: 10px;">
+                <button class="btn-no" style="width: 100%;" onclick="confirmResetAll()">🗑️ Reset Weekly Progress Now</button>
+                <button class="btn-warning" style="width: 100%;" onclick="undoResetProgress()">⚠️ Undo Last Reset (Panic Button)</button>
+                <button class="btn-secondary" style="width: 100%; margin-top: 5px;" onclick="closeResetMenu()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal 4: Assign Officer Prompt -->
     <div class="modal" id="officerModal">
         <div class="modal-content">
@@ -320,7 +334,7 @@
             <h3>📜 Patch Notes: "The Panic Button Era"</h3>
             <ul>
                 <li>🦆 **Ducks Fly Together:** Upgraded the Yellow Line color to authentic, eye-searing Oregon Ducks Yellow (`#FEE12B`). Sco Ducks!</li>
-                <li>🚨 **The "OH SHIT" Button:** Accidental wipe? Added a panic restore button to save you from IT purgatory.</li>
+                <li>⚠️ **Emergency Recovery:** Tucked the Undo Reset (Panic Button) cleanly inside the admin reset menu.</li>
                 <li>🔐 **Gatekeeping 101:** Separated users into Chad (Metrics), TriMet (Interactive password `trimet`), and Allied (Look-but-don't-touch).</li>
                 <li>👮 **Cop Copity Cop:** Added "Assign Officer" headers so everyone knows who to blame if a platform goes silent.</li>
                 <li>📋 **Copy-Paste Laziness:** Added auto-fill buttons so you don't even have to re-type last week's broken dial tones.</li>
@@ -830,10 +844,19 @@
         function openNotepad() { document.getElementById("notepadModal").style.display = "flex"; }
         function closeNotepad() { document.getElementById("notepadModal").style.display = "none"; }
 
-        /* Confirmation & Reset Routines */
+        /* Reset & Restore Menu Handlers */
+        function openResetMenu() {
+            document.getElementById("resetControlModal").style.display = "flex";
+        }
+
+        function closeResetMenu() {
+            document.getElementById("resetControlModal").style.display = "none";
+        }
+
         function confirmResetAll() {
             if (confirm("Are you sure you want to reset all phone progress for the week? Current progress will be backed up.")) {
                 resetAll();
+                closeResetMenu();
             }
         }
 
@@ -843,7 +866,6 @@
             let issuesList = [];
             const totalPhones = phones.length;
 
-            // Preserve full phone array snapshot for undo recovery
             const fullPhoneBackup = JSON.parse(JSON.stringify(phones));
 
             phones.forEach(p => {
@@ -872,16 +894,16 @@
             });
         }
 
-        /* Emergency Restore / Undo Function */
         function undoResetProgress() {
             if (!lastWeekDataCache || !lastWeekDataCache.fullPhoneBackup) {
                 alert("No previous backup snapshot available to undo!");
                 return;
             }
 
-            if (confirm("🚨 OH SHIT RECOVERY: Are you sure you want to restore the phone checklist to its pre-reset state?")) {
+            if (confirm("⚠️ PANIC RESTORE: Are you sure you want to restore the phone checklist to its pre-reset state?")) {
                 phonesRef.set(lastWeekDataCache.fullPhoneBackup).then(() => {
                     alert("System successfully restored to previous snapshot!");
+                    closeResetMenu();
                 });
             }
         }
