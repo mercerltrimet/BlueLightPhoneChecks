@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Phone System Check</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; background-color: #f4f4f9; color: #333; }
+        
+        /* Header & Logo Layout */
+        .header-container { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .trimet-logo { height: 45px; width: 45px; flex-shrink: 0; }
+        .header-text h1 { margin: 0; color: #2c3e50; font-size: 28px; }
+        .header-text p { margin: 4px 0 0 0; color: #666; font-size: 14px; }
+
+        .container { display: flex; gap: 30px; }
+        .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); flex: 1; }
+        h2 { color: #2c3e50; margin-top: 0; }
+        
+        /* Line Section Styling */
+        .lines-container { max-height: 75vh; overflow-y: auto; padding-right: 10px; }
+        .line-section { margin-bottom: 25px; border-radius: 8px; padding: 15px; background: #fafafa; border: 1px solid #e0e0e0; }
+        .line-header { font-size: 18px; font-weight: bold; padding: 10px 14px; border-radius: 6px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; color: white; }
+        
+        /* Line Colors */
+        .bg-blue { background-color: #2b70c9; }
+        .bg-yellow { background-color: #FEE11A; color: #111; } /* Oregon Ducks Yellow */
+        .bg-green { background-color: #1e5631; color: #ffffff; } /* Dark Forest Green */
+        .bg-orange { background-color: #e67e22; }
+        .bg-red { background-color: #d9534f; }
+        .bg-misc { background-color: #7f8c8d; }
+
+        .line-blue { border-left: 6px solid #2b70c9; }
+        .line-yellow { border-left: 6px solid #FEE11A; }
+        .line-green { border-left: 6px solid #1e5631; }
+        .line-orange { border-left: 6px solid #e67e22; }
+        .line-red { border-left: 6px solid #d9534f; }
+        .line-misc { border-left: 6px solid #7f8c8d; }
+
+        /* Phone Grid */
+        .phone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+        .phone-card { 
+            padding: 12px; border: 2px solid #ccc; border-radius: 6px; text-align: center; 
+            cursor: pointer; background: #fff; font-weight: bold; font-size: 13px; transition: 0.2s; 
+        }
+        .phone-card:hover { background: #f0f0f0; }
+        .status-green { background-color: #d4edda !important; border-color: #28a745 !important; color: #155724; }
+        .status-red { background-color: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; }
+
+        /* Summary Section */
+        .summary-box { margin-top: 15px; padding: 10px; background: #e9ecef; border-radius: 5px; }
+        .archive-box { margin-top: 25px; padding: 15px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; }
+        ul { padding-left: 20px; max-height: 25vh; overflow-y: auto; }
+
+        /* Controls */
+        .controls { margin-top: 15px; display: flex; justify-content: flex-end; }
+        .btn-reset { background-color: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-reset:hover { background-color: #5a6268; }
+
+        /* Modal Overlay */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 100; }
+        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 420px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .modal-buttons { margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end; }
+        button { padding: 8px 15px; cursor: pointer; border: none; border-radius: 4px; font-weight: bold; }
+        .btn-yes { background: #28a745; color: white; }
+        .btn-no { background: #dc3545; color: white; }
+        .btn-primary { background: #007bff; color: white; }
+        input[type="text"] { width: 100%; padding: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        textarea { width: 100%; height: 180px; padding: 10px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 14px; resize: vertical; }
+
+        /* Floating Action Buttons Group */
+        .floating-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 99;
+        }
+
+        .floating-btn {
+            background-color: #343a40;
+            color: #fff;
+            border: 2px solid #6c757d;
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .floating-btn:hover {
+            transform: scale(1.08) rotate(-2deg);
+            background-color: #212529;
+        }
+    </style>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+    <!-- Top Header Branding -->
+    <div class="header-container">
+        <!-- Embedded TriMet Inline Vector Logo -->
+        <svg class="trimet-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" rx="20" fill="#D84A26"/>
+            <path d="M50 20 C33.4 20 20 33.4 20 50 C20 66.6 33.4 80 50 80 C66.6 80 80 66.6 80 50 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+            <path d="M35 38 C43.3 26 56.7 26 65 38 C73.3 50 67 65 50 65 C33 65 26.7 50 35 38 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+            <path d="M65 62 C56.7 74 43.3 74 35 62 C26.7 50 33 35 50 35 C67 35 73.3 50 65 62 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+        </svg>
+        <div class="header-text">
+            <h1>Weekly Phone System Check</h1>
+            <p>Click on a phone name below to begin its inspection check.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Interactive Phones Panel Grouped By Line -->
+        <div class="panel">
+            <h2>Phone Directory</h2>
+            <div class="lines-container" id="linesContainer">
+                <!-- Line groups & Phone grids injected via JS -->
+            </div>
+        </div>
+
+        <!-- Live Summary Panel -->
+        <div class="panel">
+            <h2>Live Summary Report</h2>
+            <div class="summary-box">
+                <p><strong>Total Working Phones:</strong> <span id="workingCount">0/0</span></p>
+                <p><strong>Total Issues Flagged:</strong> <span id="issueCount">0/0</span></p>
+            </div>
+            <h3>Current Issues Log:</h3>
+            <ul id="issuesList">
+                <li><em>No issues reported yet.</em></li>
+            </ul>
+            <div class="controls">
+                <button class="btn-reset" onclick="resetAll()">Reset Weekly Progress</button>
+            </div>
+
+            <!-- Previous Week Summary Archive -->
+            <div class="archive-box">
+                <h3>Last Week's Summary</h3>
+                <p><strong>Last Reset Date:</strong> <span id="lastResetDate">N/A</span></p>
+                <p><strong>Working Phones:</strong> <span id="lastWorkingCount">N/A</span></p>
+                <p><strong>Issues Flagged:</strong> <span id="lastIssueCount">N/A</span></p>
+                <p><strong>Archived Issues Log:</strong></p>
+                <ul id="lastIssuesList">
+                    <li><em>No previous record found.</em></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 1: Working Prompt -->
+    <div class="modal" id="modalPrompt1">
+        <div class="modal-content">
+            <h3 id="modalPhoneTitle">Phone Check</h3>
+            <p>Is the phone working correctly?</p>
+            <div class="modal-buttons">
+                <button class="btn-yes" onclick="handleYes()">Yes</button>
+                <button class="btn-no" onclick="handleNoPrompt()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Issue Details Prompt -->
+    <div class="modal" id="modalPrompt2">
+        <div class="modal-content">
+            <h3>Report Issue</h3>
+            <p>What is wrong with this phone?</p>
+            <input type="text" id="issueDescription" placeholder="e.g., No dial tone, static on line">
+            
+            <p>Need to create a ticket? <a href="https://trimet.atlassian.net/servicedesk/customer/portal/9/group/1051/create/136" target="_blank" style="color: #007bff;">Click here to place a work order</a></p>
+            
+            <label for="workOrderInput"><strong>Work Order Number:</strong></label>
+            <input type="text" id="workOrderInput" placeholder="Paste work order # here">
+            
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="saveIssue()">Submit & Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Changelog Popup -->
+    <div class="modal" id="changelogModal">
+        <div class="modal-content">
+            <h3>📜 Patch Notes & Updates</h3>
+            <ul>
+                <li>🦆 Changed yellow to be Oregon Ducks-colored</li>
+                <li>🌲 Made the green line a darker shade of green</li>
+                <li>🤓 Reordered the trains to be in order</li>
+                <li>🚂 Added train emojis</li>
+                <li>🎨 Made the colors pretty</li>
+                <li>📋 Added a previous week thing to make sure there is no duplicates</li>
+                <li>🚨 Added a shared notepad for possessed computers</li>
+            </ul>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="closeChangelog()">Close & Resume Checking Phones</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 4: Shared IT Notepad Popup -->
+    <div class="modal" id="notepadModal">
+        <div class="modal-content" style="width: 500px;">
+            <h3>🚨 Help! Computers Are Possessed By Demons</h3>
+            <p style="font-size: 13px; color: #666;">Shared live notepad. Anyone can write whatever they want here. Type your IT complaints or summoning rituals below:</p>
+            <textarea id="sharedNotepadArea" placeholder="Type IT grievances, rants, or tech support cries for help here... (Auto-saves live)"></textarea>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="closeNotepad()">Close Notepad</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-buttons">
+        <button class="floating-btn" onclick="openNotepad()">🚨 Help! Computers Are Possessed By Demons</button>
+        <button class="floating-btn" onclick="openChangelog()">🛠️ Changelog</button>
+    </div>
+
+    <script>
+        // Firebase Configuration Keys
+        const firebaseConfig = {
+            apiKey: "AIzaSyBGJMagjXti25kZZ27v76IPoQSAVnPoJ6E",
+            authDomain: "blp-checks.firebaseapp.com",
+            databaseURL: "https://blp-checks-default-rtdb.firebaseio.com",
+            projectId: "blp-checks",
+            storageBucket: "blp-checks.firebasestorage.app",
+            messagingSenderId: "526043634080",
+            appId: "1:526043634080:web:1d53a9cadc601e38fdacc5"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const phonesRef = db.ref('weekly_phone_check');
+        const lastWeekRef = db.ref('last_week_summary');
+        const notepadRef = db.ref('shared_it_notepad');
+
+        // Line categories matching order and colors
+        const lineCategories = [
+            { key: "Blue Line", title: "Blue Line", bgClass: "bg-blue", borderClass: "line-blue" },
+            { key: "Yellow Line", title: "Yellow Line", bgClass: "bg-yellow", borderClass: "line-yellow" },
+            { key: "Green Line", title: "Green Line", bgClass: "bg-green", borderClass: "line-green" },
+            { key: "Orange Line", title: "Orange Line", bgClass: "bg-orange", borderClass: "line-orange" },
+            { key: "Red Line", title: "Red Line", bgClass: "bg-red", borderClass: "line-red" },
+            { key: "Miscellaneous", title: "Miscellaneous", bgClass: "bg-misc", borderClass: "line-misc" }
+        ];
+
+        // Master Raw Data
+        const rawPhoneData = [
+            // Blue Line
+            { line: "Blue Line", name: "Hillsboro TC EB", id: "1864" },
+            { line: "Blue Line", name: "Hillsboro TC WB", id: "1865" },
+            { line: "Blue Line", name: "Tuality (HB Health)", id: "1889" },
+            { line: "Blue Line", name: "Washington/12th", id: "1872" },
+            { line: "Blue Line", name: "Fair Complex EB", id: "1867" },
+            { line: "Blue Line", name: "Fair Complex WB", id: "1868" },
+            { line: "Blue Line", name: "Hawthorn Farm", id: "1890" },
+            { line: "Blue Line", name: "Orenco", id: "1873" },
+            { line: "Blue Line", name: "Quatama", id: "1874" },
+            { line: "Blue Line", name: "Willow Creek", id: "1866" },
+            { line: "Blue Line", name: "Elmonica", id: "1871" },
+            { line: "Blue Line", name: "Merlo", id: "1883" },
+            { line: "Blue Line", name: "Beaverton Creek", id: "1881" },
+            { line: "Blue Line", name: "Millikan", id: "1884" },
+            { line: "Blue Line", name: "Beaverton Central EB", id: "1885" },
+            { line: "Blue Line", name: "Beaverton Central WB", id: "1886" },
+            { line: "Blue Line", name: "BTC East", id: "1804" },
+            { line: "Blue Line", name: "BTC West", id: "1805" },
+            { line: "Blue Line", name: "Sunset EB", id: "1861" },
+            { line: "Blue Line", name: "Sunset WB", id: "1862" },
+            { line: "Blue Line", name: "Sunset Garage", id: "1863" },
+            { line: "Blue Line", name: "Washington Park EB", id: "1869" },
+            { line: "Blue Line", name: "Washington Park WB", id: "1870" },
+            { line: "Blue Line", name: "Rose Quarter", id: "1803" },
+            { line: "Blue Line", name: "OCC", id: "1806" },
+            { line: "Blue Line", name: "7th Ave", id: "1807" },
+            { line: "Blue Line", name: "Lloyd", id: "1808" },
+            { line: "Blue Line", name: "Hollywood", id: "1809" },
+            { line: "Blue Line", name: "60th", id: "1810" },
+            { line: "Blue Line", name: "82nd", id: "1811" },
+            { line: "Blue Line", name: "Gateway North", id: "1812" },
+            { line: "Blue Line", name: "Gateway Op Break", id: "1813" },
+            { line: "Blue Line", name: "Gateway Security", id: "1814" },
+            { line: "Blue Line", name: "Gateway Signal", id: "1815" },
+            { line: "Blue Line", name: "102nd EB", id: "1816" },
+            { line: "Blue Line", name: "102nd WB", id: "1817" },
+            { line: "Blue Line", name: "122nd EB", id: "1818" },
+            { line: "Blue Line", name: "122nd WB", id: "1819" },
+            { line: "Blue Line", name: "148th EB", id: "1820" },
+            { line: "Blue Line", name: "148th WB", id: "1821" },
+            { line: "Blue Line", name: "162nd EB", id: "1822" },
+            { line: "Blue Line", name: "162nd WB", id: "1823" },
+            { line: "Blue Line", name: "172nd EB", id: "1824" },
+            { line: "Blue Line", name: "172nd WB", id: "1825" },
+            { line: "Blue Line", name: "181st EB", id: "1826" },
+            { line: "Blue Line", name: "181st WB", id: "1827" },
+            { line: "Blue Line", name: "Rockwood EB", id: "1828" },
+            { line: "Blue Line", name: "Rockwood WB", id: "1829" },
+            { line: "Blue Line", name: "Civic Dr EB", id: "1878" },
+            { line: "Blue Line", name: "Civic Dr WB", id: "1879" },
+            { line: "Blue Line", name: "Gresham City Hall EB", id: "1830" },
+            { line: "Blue Line", name: "Gresham City Hall WB", id: "1831" },
+            { line: "Blue Line", name: "Gresham Central EB", id: "1832" },
+            { line: "Blue Line", name: "Gresham Central WB", id: "1833" },
+            { line: "Blue Line", name: "Cleveland", id: "1880" },
+
+            // Yellow Line
+            { line: "Yellow Line", name: "Expo North", id: "1887" },
+            { line: "Yellow Line", name: "Expo South", id: "1888" },
+            { line: "Yellow Line", name: "Delta Park", id: "1834" },
+            { line: "Yellow Line", name: "Kenton/Denver SB", id: "1835" },
+            { line: "Yellow Line", name: "Lombard NB", id: "1836" },
+            { line: "Yellow Line", name: "Lombard SB", id: "1837" },
+            { line: "Yellow Line", name: "Rosa Parks NB", id: "1838" },
+            { line: "Yellow Line", name: "Rosa Parks SB", id: "1839" },
+            { line: "Yellow Line", name: "Killingsworth NB", id: "1840" },
+            { line: "Yellow Line", name: "Killingsworth SB", id: "1841" },
+            { line: "Yellow Line", name: "Prescott", id: "1843" },
+            { line: "Yellow Line", name: "Overlook NB", id: "1844" },
+            { line: "Yellow Line", name: "Overlook SB", id: "1845" },
+            { line: "Yellow Line", name: "Albina-Mississippi", id: "1882" },
+            { line: "Yellow Line", name: "IRQ NB", id: "1842" },
+
+            // Green Line
+            { line: "Green Line", name: "Main St", id: "1846" },
+            { line: "Green Line", name: "Division", id: "1847" },
+            { line: "Green Line", name: "Powell", id: "1848" },
+            { line: "Green Line", name: "Holgate", id: "1849" },
+            { line: "Green Line", name: "Foster", id: "1850" },
+            { line: "Green Line", name: "Flavel", id: "1851" },
+            { line: "Green Line", name: "Fuller", id: "1852" },
+            { line: "Green Line", name: "CTC", id: "1853" },
+
+            // Orange Line
+            { line: "Orange Line", name: "South Waterfront", id: "1891" },
+            { line: "Orange Line", name: "North Waterfront", id: "1892" },
+            { line: "Orange Line", name: "OMSI NB", id: "1854" },
+            { line: "Orange Line", name: "OMSI SB", id: "1855" },
+            { line: "Orange Line", name: "Clinton/12th", id: "1875" },
+            { line: "Orange Line", name: "17th/Rhine", id: "1893" },
+            { line: "Orange Line", name: "17th/Holgate", id: "1894" },
+            { line: "Orange Line", name: "Bybee", id: "1876" },
+            { line: "Orange Line", name: "Tacoma", id: "1858" },
+            { line: "Orange Line", name: "Milwaukie/Main", id: "1877" },
+            { line: "Orange Line", name: "Park Ave WB", id: "1856" },
+            { line: "Orange Line", name: "Park Ave EB", id: "1857" },
+
+            // Red Line
+            { line: "Red Line", name: "Park Rose", id: "1859" },
+
+            // Miscellaneous
+            { line: "Miscellaneous", name: "Tigard Transit", id: "1860" }
+        ];
+
+        function buildDefaultPhones() {
+            return rawPhoneData.map((item, index) => ({
+                id: index + 1,
+                line: item.line,
+                name: `${item.name} (${item.id})`,
+                status: "untested",
+                issue: "",
+                workOrder: ""
+            }));
+        }
+
+        let phones = buildDefaultPhones();
+        let activePhoneId = null;
+
+        // Firebase Listener: Active Phones
+        phonesRef.on('value', (snapshot) => {
+            const val = snapshot.val();
+            let parsedData = [];
+
+            if (val) {
+                parsedData = Array.isArray(val) ? val : Object.values(val);
+            }
+
+            const isInvalid = !parsedData || parsedData.length === 0 || !parsedData[0] || !parsedData[0].line;
+
+            if (isInvalid) {
+                phones = buildDefaultPhones();
+                phonesRef.set(phones);
+            } else {
+                phones = parsedData;
+            }
+            renderPhones();
+        });
+
+        // Firebase Listener: Last Week Summary Archive
+        lastWeekRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                document.getElementById("lastResetDate").innerText = data.resetDate || "N/A";
+                document.getElementById("lastWorkingCount").innerText = data.workingCount || "0/0";
+                document.getElementById("lastIssueCount").innerText = data.issueCount || "0/0";
+                
+                let archiveIssuesHTML = "";
+                if (data.issuesList && data.issuesList.length > 0) {
+                    data.issuesList.forEach(item => {
+                        archiveIssuesHTML += `<li><strong>${item.name}</strong>: ${item.issue} (Work Order: ${item.workOrder})</li>`;
+                    });
+                }
+                document.getElementById("lastIssuesList").innerHTML = archiveIssuesHTML || "<li><em>No issues recorded last week.</em></li>";
+            }
+        });
+
+        // Firebase Listener & Sync for Shared Notepad
+        notepadRef.on('value', (snapshot) => {
+            const text = snapshot.val();
+            const area = document.getElementById("sharedNotepadArea");
+            if (text !== null && area.value !== text) {
+                area.value = text;
+            }
+        });
+
+        document.getElementById("sharedNotepadArea").addEventListener("input", (e) => {
+            notepadRef.set(e.target.value);
+        });
+
+        function renderPhones() {
+            const container = document.getElementById("linesContainer");
+            container.innerHTML = "";
+            
+            let workingCount = 0;
+            let issueCount = 0;
+            let issuesHTML = "";
+            const totalPhones = phones.length;
+
+            lineCategories.forEach(category => {
+                const categoryPhones = phones.filter(p => p && p.line === category.key);
+                if (categoryPhones.length === 0) return;
+
+                const section = document.createElement("div");
+                section.className = `line-section ${category.borderClass}`;
+
+                const header = document.createElement("div");
+                header.className = `line-header ${category.bgClass}`;
+                header.innerHTML = `<span>🚆</span> <span>${category.title}</span>`;
+                section.appendChild(header);
+
+                const grid = document.createElement("div");
+                grid.className = "phone-grid";
+
+                categoryPhones.forEach(phone => {
+                    const card = document.createElement("div");
+                    card.className = "phone-card";
+                    card.innerText = phone.name;
+                    
+                    if (phone.status === "working") {
+                        card.classList.add("status-green");
+                        workingCount++;
+                    } else if (phone.status === "broken") {
+                        card.classList.add("status-red");
+                        issueCount++;
+                        issuesHTML += `<li><strong>${phone.name}</strong>: ${phone.issue} (Work Order: ${phone.workOrder || 'None'})</li>`;
+                    }
+
+                    card.onclick = () => openCheckModal(phone.id);
+                    grid.appendChild(card);
+                });
+
+                section.appendChild(grid);
+                container.appendChild(section);
+            });
+
+            document.getElementById("workingCount").innerText = `${workingCount}/${totalPhones}`;
+            document.getElementById("issueCount").innerText = `${issueCount}/${totalPhones}`;
+            
+            const listEl = document.getElementById("issuesList");
+            listEl.innerHTML = issuesHTML || "<li><em>No issues reported yet.</em></li>";
+        }
+
+        function openCheckModal(id) {
+            activePhoneId = id;
+            const phone = phones.find(p => p && p.id === id);
+            if (!phone) return;
+            document.getElementById("modalPhoneTitle").innerText = `Checking: ${phone.name}`;
+            document.getElementById("modalPrompt1").style.display = "flex";
+        }
+
+        function handleYes() {
+            const phone = phones.find(p => p && p.id === activePhoneId);
+            if (phone) {
+                phone.status = "working";
+                phone.issue = "";
+                phone.workOrder = "";
+                closeModals();
+                phonesRef.set(phones);
+            }
+        }
+
+        function handleNoPrompt() {
+            document.getElementById("modalPrompt1").style.display = "none";
+            document.getElementById("issueDescription").value = "";
+            document.getElementById("workOrderInput").value = "";
+            document.getElementById("modalPrompt2").style.display = "flex";
+        }
+
+        function saveIssue() {
+            const phone = phones.find(p => p && p.id === activePhoneId);
+            if (phone) {
+                phone.status = "broken";
+                phone.issue = document.getElementById("issueDescription").value || "No description provided";
+                phone.workOrder = document.getElementById("workOrderInput").value || "N/A";
+                closeModals();
+                phonesRef.set(phones);
+            }
+        }
+
+        function closeModals() {
+            document.getElementById("modalPrompt1").style.display = "none";
+            document.getElementById("modalPrompt2").style.display = "none";
+        }
+
+        function openChangelog() {
+            document.getElementById("changelogModal").style.display = "flex";
+        }
+
+        function closeChangelog() {
+            document.getElementById("changelogModal").style.display = "none";
+        }
+
+        function openNotepad() {
+            document.getElementById("notepadModal").style.display = "flex";
+        }
+
+        function closeNotepad() {
+            document.getElementById("notepadModal").style.display = "none";
+        }
+
+        function resetAll() {
+            if (confirm("Are you sure you want to reset all phone statuses? Current progress will be archived as 'Last Week's Summary'.")) {
+                
+                let workingCount = 0;
+                let issueCount = 0;
+                let issuesList = [];
+                const totalPhones = phones.length;
+
+                phones.forEach(p => {
+                    if (p.status === "working") workingCount++;
+                    if (p.status === "broken") {
+                        issueCount++;
+                        issuesList.push({
+                            name: p.name,
+                            issue: p.issue || "No description provided",
+                            workOrder: p.workOrder || "N/A"
+                        });
+                    }
+                });
+
+                const archiveData = {
+                    resetDate: new Date().toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }),
+                    workingCount: `${workingCount}/${totalPhones}`,
+                    issueCount: `${issueCount}/${totalPhones}`,
+                    issuesList: issuesList
+                };
+
+                lastWeekRef.set(archiveData).then(() => {
+                    phones = buildDefaultPhones();
+                    phonesRef.set(phones);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
