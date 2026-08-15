@@ -34,7 +34,6 @@
 
         body { font-family: Arial, sans-serif; margin: 30px; background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.3s, color 0.3s; }
         
-        /* Header Layout & Dark Mode Toggle */
         .header-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
         .header-left { display: flex; align-items: center; gap: 15px; }
         .trimet-logo { height: 45px; width: 45px; flex-shrink: 0; }
@@ -61,7 +60,6 @@
         .panel { background: var(--panel-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); flex: 1; transition: background-color 0.3s; }
         h2, h3 { color: var(--text-color); margin-top: 0; }
         
-        /* Line Section Styling */
         .lines-container { max-height: 75vh; overflow-y: auto; padding-right: 10px; }
         .line-section { margin-bottom: 25px; border-radius: 8px; padding: 15px; background: var(--section-bg); border: 1px solid var(--border-color); }
         .line-header { 
@@ -72,15 +70,14 @@
         .officer-tag { 
             background: rgba(255, 255, 255, 0.25); 
             border: 1px solid rgba(255, 255, 255, 0.6); 
-            padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: normal; 
+            padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: normal; cursor: pointer;
         }
         
-        /* Line Colors */
         .bg-blue { background-color: #2b70c9; }
         .bg-yellow { background-color: #FEE12B; color: #111; }
         .bg-green { background-color: #1e5631; color: #ffffff; }
         .bg-orange { background-color: #e67e22; }
-        .bg-red { background-color: #d9534f; }
+        .bg-red { background-color: #b02a2a; }
         .bg-misc { background-color: #7f8c8d; }
         .bg-intercom { background-color: #8e44ad; }
 
@@ -88,11 +85,10 @@
         .line-yellow { border-left: 6px solid #FEE12B; }
         .line-green { border-left: 6px solid #1e5631; }
         .line-orange { border-left: 6px solid #e67e22; }
-        .line-red { border-left: 6px solid #d9534f; }
+        .line-red { border-left: 6px solid #b02a2a; }
         .line-misc { border-left: 6px solid #7f8c8d; }
         .line-intercom { border-left: 6px solid #8e44ad; }
 
-        /* Phone Grid */
         .phone-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
         .phone-card { 
             padding: 12px; border: 2px solid var(--border-color); border-radius: 6px; text-align: center; 
@@ -102,31 +98,14 @@
         .status-green { background-color: #d4edda !important; border-color: #28a745 !important; color: #155724 !important; }
         .status-red { background-color: #f8d7da !important; border-color: #dc3545 !important; color: #721c24 !important; }
 
-        /* Summary Section */
         .summary-box { margin-top: 15px; padding: 10px; background: var(--summary-bg); border-radius: 5px; }
         .archive-box { margin-top: 25px; padding: 15px; background: var(--archive-bg); border: 1px solid var(--border-color); border-radius: 6px; }
         ul { padding-left: 20px; max-height: 25vh; overflow-y: auto; }
 
-        /* Controls & Header Action Buttons */
         .controls { margin-top: 15px; display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
         .btn-reset { background-color: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .btn-reset:hover { background-color: #5a6268; }
 
-        .btn-officer {
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #2c3e50;
-            border: 1px solid #ccc;
-            padding: 4px 10px;
-            font-size: 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .btn-officer:hover { background-color: #ffffff; transform: scale(1.02); }
-        .btn-officer.unassign { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
-
-        /* Modal Overlay & Backdrop */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 100; }
         .modal-content { background: var(--modal-bg); color: var(--text-color); padding: 25px; border-radius: 8px; width: 480px; box-shadow: 0 6px 15px rgba(0,0,0,0.3); position: relative; border: 1px solid var(--border-color); }
         .modal-buttons { margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; }
@@ -135,51 +114,21 @@
         .btn-no { background: #dc3545; color: white; }
         .btn-primary { background: #007bff; color: white; }
         .btn-secondary { background: #6c757d; color: white; }
-        .btn-warning { background: #ffc107; color: #212529; }
-        
-        .btn-modal-top-reset {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: #ffc107;
-            color: #212529;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .btn-modal-top-reset:hover { background-color: #e0a800; }
-
-        /* Reference Cards */
-        .reference-card { border-radius: 6px; padding: 10px; margin-bottom: 12px; font-size: 13px; }
-        .last-week-card { background-color: var(--summary-bg); border: 1px dashed var(--border-color); }
-        .current-issue-card { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
-        .btn-copy-data { color: white; font-size: 11px; padding: 4px 8px; margin-top: 6px; border-radius: 3px; }
-        .btn-copy-last { background-color: #17a2b8; }
-        .btn-copy-last:hover { background-color: #138496; }
-        .btn-copy-active { background-color: #dc3545; }
-        .btn-copy-active:hover { background-color: #c82333; }
 
         input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid var(--border-color); background: var(--panel-bg); color: var(--text-color); border-radius: 4px; }
         textarea { width: 100%; height: 180px; padding: 10px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; border: 1px solid var(--border-color); background: var(--panel-bg); color: var(--text-color); border-radius: 4px; font-family: inherit; font-size: 14px; resize: vertical; }
 
-        /* Role Cards */
         .role-selection-box { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
         .role-card { background: var(--section-bg); border: 2px solid #007bff; border-radius: 8px; padding: 16px; cursor: pointer; transition: 0.2s; text-align: left; }
         .role-card:hover { transform: translateY(-2px); opacity: 0.9; }
         .role-card h4 { margin: 0 0 6px 0; color: #007bff; font-size: 18px; }
         .role-card p { margin: 0; font-size: 14px; color: var(--subtext-color); }
 
-        /* Floating Action Buttons */
         .floating-buttons { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 99; }
-        .floating-btn { background-color: #343a40; color: #fff; border: 2px solid #6c757d; border-radius: 20px; padding: 8px 14px; font-size: 12px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.2s, background-color 0.2s; }
-        .floating-btn:hover { transform: scale(1.08) rotate(-2deg); background-color: #212529; }
+        .floating-btn { background-color: #343a40; color: #fff; border: 2px solid #6c757d; border-radius: 20px; padding: 8px 14px; font-size: 12px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.2s, background-color 0.2s; text-decoration: none; display: inline-flex; align-items: center; }
+        .floating-btn:hover { transform: scale(1.08); background-color: #212529; }
     </style>
 
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
@@ -190,8 +139,6 @@
             <svg class="trimet-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <rect width="100" height="100" rx="20" fill="#D84A26"/>
                 <path d="M50 20 C33.4 20 20 33.4 20 50 C20 66.6 33.4 80 50 80 C66.6 80 80 66.6 80 50 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-                <path d="M35 38 C43.3 26 56.7 26 65 38 C73.3 50 67 65 50 65 C33 65 26.7 50 35 38 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-                <path d="M65 62 C56.7 74 43.3 74 35 62 C26.7 50 33 35 50 35 C67 35 73.3 50 65 62 Z" fill="none" stroke="#FFFFFF" stroke-width="8"/>
             </svg>
             <div class="header-text">
                 <h1>Weekly Phone System Check</h1>
@@ -221,19 +168,7 @@
                 <li><em>No issues reported yet.</em></li>
             </ul>
             <div class="controls">
-                <button class="btn-reset" onclick="requestAdminAccess(openResetMenu)">🔒 Reset Weekly Progress (Admin)</button>
-            </div>
-
-            <div class="archive-box">
-                <h3>Last Week's Summary</h3>
-                <p><strong>Last Reset Date:</strong> <span id="lastResetDate">N/A</span></p>
-                <p><strong>Working Phones:</strong> <span id="lastWorkingCount">N/A</span></p>
-                <p><strong>Working Intercoms:</strong> <span id="lastWorkingIntercomCount">N/A</span></p>
-                <p><strong>Issues Flagged:</strong> <span id="lastIssueCount">N/A</span></p>
-                <p><strong>Archived Issues Log:</strong></p>
-                <ul id="lastIssuesList">
-                    <li><em>No previous record found.</em></li>
-                </ul>
+                <button class="btn-reset" onclick="promptReset()">Reset All Checks</button>
             </div>
         </div>
     </div>
@@ -243,7 +178,6 @@
         <div class="modal-content" style="width: 540px;">
             <h3>👋 Welcome to Phone System Check</h3>
             <p>Select an operational mode to continue:</p>
-            
             <div class="role-selection-box">
                 <div class="role-card" onclick="openBossSummary()">
                     <h4>🗿 Chad: Summary and statistics</h4>
@@ -255,13 +189,13 @@
                 </div>
                 <div class="role-card" style="border-color: #17a2b8;" onclick="enableAlliedViewerMode()">
                     <h4 style="color: #17a2b8;">🛡️ Allied: Viewer mode</h4>
-                    <p>Read-only access to track system progress, scroll directories, and inspect active issues.</p>
+                    <p>Read-only access to track system progress and inspect issues.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal 0B: Boss Live Dashboard Popup -->
+    <!-- Modal 0B: Boss Dashboard Popup -->
     <div class="modal" id="bossSummaryModal">
         <div class="modal-content">
             <h3>📈 Real-Time Phone System Overview</h3>
@@ -280,118 +214,41 @@
         </div>
     </div>
 
-    <!-- Modal 1: Working Prompt -->
-    <div class="modal" id="modalPrompt1">
+    <!-- Modal 1: Status Check -->
+    <div class="modal" id="statusModal">
         <div class="modal-content">
-            <button class="btn-modal-top-reset" onclick="requestAdminAccess(resetSinglePhone)">🔒 Reset</button>
-            <h3 id="modalPhoneTitle">Phone Check</h3>
-            <p>Is the device working correctly?</p>
+            <h3 id="modalPhoneTitle">Check Phone</h3>
+            <p>Is this phone working properly?</p>
             <div class="modal-buttons">
-                <button class="btn-yes" onclick="handleYes()">Yes</button>
-                <button class="btn-no" onclick="handleNoPrompt()">No</button>
+                <button class="btn-yes" onclick="setPhoneStatus('working')">Yes (Working)</button>
+                <button class="btn-no" onclick="openIssueModal()">No (Report Issue)</button>
+                <button class="btn-secondary" onclick="closeModal('statusModal')">Cancel</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal 2: Issue Details Prompt -->
-    <div class="modal" id="modalPrompt2">
+    <!-- Modal 2: Issue Description -->
+    <div class="modal" id="issueModal">
         <div class="modal-content">
-            <h3>Report Issue</h3>
-            
-            <div id="currentIssueCard" class="reference-card current-issue-card" style="display:none;">
-                <strong>🚨 Current Active Issue:</strong>
-                <div id="currentIssueInfoText" style="margin-top: 4px;">Loading active issue...</div>
-                <button id="btnCopyCurrentIssue" class="btn-copy-data btn-copy-active" onclick="copyCurrentIssueData()">📋 Copy Active Data</button>
-            </div>
-
-            <div class="reference-card last-week-card">
-                <strong>Last Week's Status:</strong>
-                <div id="lastWeekInfoText" style="margin-top: 4px; opacity: 0.8;">Checking history...</div>
-                <button id="btnCopyLastWeek" class="btn-copy-data btn-copy-last" style="display:none;" onclick="copyLastWeekData()">📋 Copy from Last Week</button>
-            </div>
-
-            <p>What is wrong with this device?</p>
-            <input type="text" id="issueDescription" placeholder="e.g., No dial tone, static on line">
-            
-            <p>Need to create a ticket? <a href="https://trimet.atlassian.net/servicedesk/customer/portal/9/group/1051/create/136" target="_blank" style="color: #007bff;">Click here to place a work order</a></p>
-            
-            <label for="workOrderInput"><strong>Work Order Number:</strong></label>
-            <input type="text" id="workOrderInput" placeholder="Paste work order # here">
-            
+            <h3 id="issuePhoneTitle">Describe Issue</h3>
+            <label for="issueInput">What is wrong with this phone?</label>
+            <textarea id="issueInput" placeholder="e.g. No dial tone, broken handset, static on line..."></textarea>
             <div class="modal-buttons">
-                <button class="btn-secondary" onclick="closeModals()">Cancel</button>
-                <button class="btn-primary" onclick="saveIssue()">Submit & Close</button>
+                <button class="btn-primary" onclick="submitIssue()">Save Issue</button>
+                <button class="btn-secondary" onclick="closeModal('issueModal')">Cancel</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal 3: Admin Auth Prompt -->
-    <div class="modal" id="adminModal">
-        <div class="modal-content">
-            <h3>🔒 Admin Authorization Required</h3>
-            <p>Please enter the admin password to perform this action:</p>
-            <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password">
-            <p id="adminErrorText" style="color: red; font-size: 12px; display: none;">Incorrect password. Try again.</p>
-            <div class="modal-buttons">
-                <button class="btn-primary" onclick="verifyAdminPassword()">Authenticate</button>
-                <button class="btn-no" onclick="closeAdminModal()">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal 3B: Reset & Recovery Menu -->
-    <div class="modal" id="resetControlModal">
-        <div class="modal-content">
-            <h3>⚙️ Weekly Reset & Recovery Controls</h3>
-            <p>Select an action below:</p>
-            <div style="background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 12px; border-radius: 6px; font-size: 13px; margin-bottom: 15px;">
-                <strong>Note:</strong> Resetting creates a new backup of your current check data before wiping the live checklist.
-            </div>
-            <div class="modal-buttons" style="flex-direction: column; gap: 10px;">
-                <button class="btn-no" style="width: 100%;" onclick="confirmResetAll()">🗑️ Reset Weekly Progress Now</button>
-                <button class="btn-warning" style="width: 100%;" onclick="undoResetProgress()">⚠️ Undo Last Reset (Panic Button)</button>
-                <button class="btn-secondary" style="width: 100%; margin-top: 5px;" onclick="closeResetMenu()">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal 4: Assign Officer Prompt -->
+    <!-- Modal 3: Officer Tag Edit -->
     <div class="modal" id="officerModal">
         <div class="modal-content">
-            <h3 id="officerModalTitle">Assign Officer</h3>
-            <p>Enter officer name or badge info:</p>
-            <input type="text" id="officerInput" placeholder="e.g. Officer Smith #402">
+            <h3 id="officerLineTitle">Assigned Inspector</h3>
+            <label for="officerInput">Enter inspector name/ID for this line:</label>
+            <input type="text" id="officerInput" placeholder="Officer Name or DPSST #">
             <div class="modal-buttons">
-                <button class="btn-secondary" onclick="closeOfficerModal()">Cancel</button>
-                <button class="btn-primary" onclick="saveOfficerAssignment()">Save Officer</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal 5: Changelog Popup -->
-    <div class="modal" id="changelogModal">
-        <div class="modal-content">
-            <h3>📜 Patch Notes</h3>
-            <ul>
-                <li>🌙 **Dark Mode Toggle:** Added non-destructive Dark Mode saved via local settings.</li>
-                <li>🔊 **Intercom Separation:** Tracked 92 Phones and 3 Intercoms separately in summaries.</li>
-                <li>🔊 **Intercom Header:** Added 🔊 Intercom 🔊 section styled in purple.</li>
-                <li>🦆 **Ducks Yellow:** Upgraded Yellow Line color (`#FEE12B`).</li>
-            </ul>
-            <div class="modal-buttons">
-                <button class="btn-primary" onclick="closeChangelog()">Close & Resume Checking</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal 6: Shared IT Notepad Popup -->
-    <div class="modal" id="notepadModal">
-        <div class="modal-content" style="width: 500px;">
-            <h3>🚨 Help! Computers Are Possessed By Demons</h3>
-            <p style="font-size: 13px; opacity: 0.8;">Shared live notepad. Type your IT complaints below:</p>
-            <textarea id="sharedNotepadArea" placeholder="Type IT grievances, rants, or tech support cries for help here... (Auto-saves live)"></textarea>
-            <div class="modal-buttons">
-                <button class="btn-primary" onclick="closeNotepad()">Close Notepad</button>
+                <button class="btn-primary" onclick="saveOfficerTag()">Save Inspector</button>
+                <button class="btn-secondary" onclick="closeModal('officerModal')">Cancel</button>
             </div>
         </div>
     </div>
@@ -399,34 +256,135 @@
     <!-- Floating Action Buttons -->
     <div class="floating-buttons">
         <button class="floating-btn" onclick="openBossSummary()">🗿 I AM CHAD</button>
-        <button class="floating-btn" onclick="openNotepad()">🚨 Help! IT Demons</button>
-        <button class="floating-btn" onclick="openChangelog()">🛠️ Changelog</button>
+        <a href="https://trimet.atlassian.net/servicedesk/customer/portal/3/group/9/create/50" target="_blank" class="floating-btn">📋 Create Work Order</a>
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "admin123";
-        
-        let isAdminAuthenticated = false;
-        let isViewerOnly = false;
-        let pendingAdminAction = null;
+        const initialDirectory = [
+            // Blue Line
+            { id: 1, name: "Hatfield Govt Ctr", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 2, name: "Hillsboro Central", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 3, name: "Tuality Hospital", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 4, name: "Washington/SE 3rd", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 5, name: "Fair Complex/Hillsboro Airport", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 6, name: "Hawthorn Farm", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 7, name: "Orenco", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 8, name: "Quatama", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 9, name: "Willow Creek", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 10, name: "Elmonica", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 11, name: "Merlo Rd/158th", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 12, name: "Beaverton Creek", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 13, name: "Millikan Way", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 14, name: "Beaverton Central", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 15, name: "Beaverton TC", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 16, name: "Sunset TC", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 17, name: "Washington Park", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 18, name: "Goose Hollow", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 19, name: "Kings Hill/SW 21st", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 20, name: "Providence Park", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 21, name: "E 122nd Ave", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 22, name: "E 130th Ave", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 23, name: "E 148th Ave", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 24, name: "E 162nd Ave", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 25, name: "E 172nd Ave", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 26, name: "E 181st Ave", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 27, name: "Rockwood/E 188th", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 28, name: "Ruby Junction/E 197th", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 29, name: "Civic Drive", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 30, name: "Gresham Central", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 31, name: "Gresham City Hall", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
+            { id: 32, name: "Cleveland Ave", line: "Blue Line", lineClass: "bg-blue", borderClass: "line-blue", status: "unchecked", issue: "" },
 
-        /* Dark Mode Persistence */
+            // Yellow Line
+            { id: 33, name: "Expo Center", line: "Yellow Line", lineClass: "bg-yellow", borderClass: "line-yellow", status: "unchecked", issue: "" },
+            { id: 34, name: "Kenton/N Denver", line: "Yellow Line", lineClass: "bg-yellow", borderClass: "line-yellow", status: "unchecked", issue: "" },
+            { id: 35, name: "N Lombard Transit Center", line: "Yellow Line", lineClass: "bg-yellow", borderClass: "line-yellow", status: "unchecked", issue: "" },
+            { id: 36, name: "N Rosa Parks Way", line: "Yellow Line", lineClass: "bg-yellow", borderClass: "line-yellow", status: "unchecked", issue: "" },
+            { id: 37, name: "N Killingsworth St", line: "Yellow Line", lineClass: "bg-yellow", borderClass: "line-yellow", status: "unchecked", issue: "" },
+            { id: 38, name: "N Prescott St", line: "Yellow Line", lineClass: "bg-yellow", borderClass: "line-yellow", status: "unchecked", issue: "" },
+            { id: 39, name: "Overlook Park", line: "Yellow Line", lineClass: "bg-yellow", borderClass: "line-yellow", status: "unchecked", issue: "" },
+            { id: 40, name: "Albina/Mississippi", line: "Yellow Line", lineClass: "bg-yellow", borderClass: "line-yellow", status: "unchecked", issue: "" },
+            { id: 41, name: "Interstate/Rose Quarter", line: "Yellow Line", lineClass: "bg-yellow", borderClass: "line-yellow", status: "unchecked", issue: "" },
+
+            // Green Line
+            { id: 42, name: "Clackamas Town Center", line: "Green Line", lineClass: "bg-green", borderClass: "line-green", status: "unchecked", issue: "" },
+            { id: 43, name: "SE Fuller Rd", line: "Green Line", lineClass: "bg-green", borderClass: "line-green", status: "unchecked", issue: "" },
+            { id: 44, name: "SE Flavel St", line: "Green Line", lineClass: "bg-green", borderClass: "line-green", status: "unchecked", issue: "" },
+            { id: 45, name: "Lents Town Center/SE Holgate", line: "Green Line", lineClass: "bg-green", borderClass: "line-green", status: "unchecked", issue: "" },
+            { id: 46, name: "SE Powell Blvd", line: "Green Line", lineClass: "bg-green", borderClass: "line-green", status: "unchecked", issue: "" },
+            { id: 47, name: "SE Division St", line: "Green Line", lineClass: "bg-green", borderClass: "line-green", status: "unchecked", issue: "" },
+            { id: 48, name: "SE Main St", line: "Green Line", lineClass: "bg-green", borderClass: "line-green", status: "unchecked", issue: "" },
+            { id: 49, name: "Gateway/NE 99th Ave TC", line: "Green Line", lineClass: "bg-green", borderClass: "line-green", status: "unchecked", issue: "" },
+
+            // Orange Line
+            { id: 50, name: "Milwaukie/Main St", line: "Orange Line", lineClass: "bg-orange", borderClass: "line-orange", status: "unchecked", issue: "" },
+            { id: 51, name: "SE Park Ave", line: "Orange Line", lineClass: "bg-orange", borderClass: "line-orange", status: "unchecked", issue: "" },
+            { id: 52, name: "SE Tacoma/Johnson Creek", line: "Orange Line", lineClass: "bg-orange", borderClass: "line-orange", status: "unchecked", issue: "" },
+            { id: 53, name: "SE Bybee Blvd", line: "Orange Line", lineClass: "bg-orange", borderClass: "line-orange", status: "unchecked", issue: "" },
+            { id: 54, name: "SE Holgate Blvd", line: "Orange Line", lineClass: "bg-orange", borderClass: "line-orange", status: "unchecked", issue: "" },
+            { id: 55, name: "SE Division St (Orange)", line: "Orange Line", lineClass: "bg-orange", borderClass: "line-orange", status: "unchecked", issue: "" },
+
+            // Red Line
+            { id: 56, name: "Portland Int'l Airport", line: "Red Line", lineClass: "bg-red", borderClass: "line-red", status: "unchecked", issue: "" },
+            { id: 57, name: "Mt Hood Ave", line: "Red Line", lineClass: "bg-red", borderClass: "line-red", status: "unchecked", issue: "" },
+            { id: 58, name: "Cascades", line: "Red Line", lineClass: "bg-red", borderClass: "line-red", status: "unchecked", issue: "" },
+            { id: 59, name: "Parkrose/Sumner TC", line: "Red Line", lineClass: "bg-red", borderClass: "line-red", status: "unchecked", issue: "" },
+            { id: 60, name: "NE 82nd Ave", line: "Red Line", lineClass: "bg-red", borderClass: "line-red", status: "unchecked", issue: "" },
+            { id: 61, name: "NE 60th Ave", line: "Red Line", lineClass: "bg-red", borderClass: "line-red", status: "unchecked", issue: "" },
+
+            // Downtown & City Center
+            { id: 62, name: "Galleria/SW 10th", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 63, name: "Library/SW 9th", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 64, name: "Pioneer Square West", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 65, name: "Pioneer Square South", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 66, name: "Pioneer Courthouse", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 67, name: "SW 6th & Pine", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 68, name: "SW 5th & Oak", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 69, name: "SW 6th & Yamhill", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 70, name: "SW 5th & Morrison", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 71, name: "SW 6th & Madison", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 72, name: "SW 5th & Main", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 73, name: "SW 6th & Columbia", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 74, name: "SW 5th & Clay", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 75, name: "SW 6th & College", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 76, name: "SW 5th & Jackson", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 77, name: "PSU Urban Plaza", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 78, name: "PSU South/SW 5th & Jackson", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 79, name: "PSU South/SW 6th & College", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 80, name: "Old Town/Chinatown", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 81, name: "Union Station/NW 6th", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 82, name: "Union Station/NW 5th", line: "Downtown Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+
+            // Eastside & Bridges
+            { id: 83, name: "Rose Quarter TC", line: "Eastside Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 84, name: "Convention Center", line: "Eastside Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 85, name: "NE 7th Ave", line: "Eastside Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 86, name: "Lloyd Center/NE 11th Ave", line: "Eastside Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 87, name: "Hollywood/NE 42nd Ave TC", line: "Eastside Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 88, name: "OMS/SE Water Ave", line: "Eastside Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 89, name: "Clinton St/SE 12th Ave", line: "Eastside Hub", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+
+            // WES / Outlying
+            { id: 90, name: "Tigard TC", line: "WES Commuter Rail", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 91, name: "Tualatin Station", line: "WES Commuter Rail", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+            { id: 92, name: "Wilsonville Station", line: "WES Commuter Rail", lineClass: "bg-misc", borderClass: "line-misc", status: "unchecked", issue: "" },
+
+            // Intercom Systems
+            { id: 93, name: "Robertson Tunnel Emergency Intercom East", line: "Intercom", lineClass: "bg-intercom", borderClass: "line-intercom", status: "unchecked", issue: "" },
+            { id: 94, name: "Robertson Tunnel Emergency Intercom West", line: "Intercom", lineClass: "bg-intercom", borderClass: "line-intercom", status: "unchecked", issue: "" },
+            { id: 95, name: "Tilikum Crossing Control Intercom", line: "Intercom", lineClass: "bg-intercom", borderClass: "line-intercom", status: "unchecked", issue: "" }
+        ];
+
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const isDark = document.body.classList.contains('dark-mode');
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            updateThemeUI(isDark);
-        }
-
-        function updateThemeUI(isDark) {
             document.getElementById('themeIcon').innerText = isDark ? '☀️' : '🌙';
             document.getElementById('themeText').innerText = isDark ? 'Light Mode' : 'Dark Mode';
         }
 
-        // Load theme preference on start
         if (localStorage.getItem('theme') === 'dark') {
             document.body.classList.add('dark-mode');
-            updateThemeUI(true);
         }
 
         const firebaseConfig = {
@@ -442,537 +400,211 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         const phonesRef = db.ref('weekly_phone_check');
-        const lastWeekRef = db.ref('last_week_summary');
-        const notepadRef = db.ref('shared_it_notepad');
         const officersRef = db.ref('line_officers');
 
-        const lineCategories = [
-            { key: "Blue Line", title: "Blue Line", icon: "🚆", bgClass: "bg-blue", borderClass: "line-blue" },
-            { key: "Yellow Line", title: "Yellow Line", icon: "🚆", bgClass: "bg-yellow", borderClass: "line-yellow" },
-            { key: "Green Line", title: "Green Line", icon: "🚆", bgClass: "bg-green", borderClass: "line-green" },
-            { key: "Orange Line", title: "Orange Line", icon: "🚆", bgClass: "bg-orange", borderClass: "line-orange" },
-            { key: "Red Line", title: "Red Line", icon: "🚆", bgClass: "bg-red", borderClass: "line-red" },
-            { key: "Miscellaneous", title: "Miscellaneous", icon: "🚆", bgClass: "bg-misc", borderClass: "line-misc" },
-            { key: "Intercom", title: "🔊 Intercom 🔊", icon: "", bgClass: "bg-intercom", borderClass: "line-intercom" }
-        ];
-
-        const rawPhoneData = [
-            { line: "Blue Line", name: "Hillsboro TC EB", id: "1864" },
-            { line: "Blue Line", name: "Hillsboro TC WB", id: "1865" },
-            { line: "Blue Line", name: "Tuality (HB Health)", id: "1889" },
-            { line: "Blue Line", name: "Washington/12th", id: "1872" },
-            { line: "Blue Line", name: "Fair Complex EB", id: "1867" },
-            { line: "Blue Line", name: "Fair Complex WB", id: "1868" },
-            { line: "Blue Line", name: "Hawthorn Farm", id: "1890" },
-            { line: "Blue Line", name: "Orenco", id: "1873" },
-            { line: "Blue Line", name: "Quatama", id: "1874" },
-            { line: "Blue Line", name: "Willow Creek", id: "1866" },
-            { line: "Blue Line", name: "Elmonica", id: "1871" },
-            { line: "Blue Line", name: "Merlo", id: "1883" },
-            { line: "Blue Line", name: "Beaverton Creek", id: "1881" },
-            { line: "Blue Line", name: "Millikan", id: "1884" },
-            { line: "Blue Line", name: "Beaverton Central EB", id: "1885" },
-            { line: "Blue Line", name: "Beaverton Central WB", id: "1886" },
-            { line: "Blue Line", name: "BTC East", id: "1804" },
-            { line: "Blue Line", name: "BTC West", id: "1805" },
-            { line: "Blue Line", name: "Sunset EB", id: "1861" },
-            { line: "Blue Line", name: "Sunset WB", id: "1862" },
-            { line: "Blue Line", name: "Sunset Garage", id: "1863" },
-            { line: "Blue Line", name: "Washington Park EB", id: "1869" },
-            { line: "Blue Line", name: "Washington Park WB", id: "1870" },
-            { line: "Blue Line", name: "Rose Quarter", id: "1803" },
-            { line: "Blue Line", name: "OCC", id: "1806" },
-            { line: "Blue Line", name: "7th Ave", id: "1807" },
-            { line: "Blue Line", name: "Lloyd", id: "1808" },
-            { line: "Blue Line", name: "Hollywood", id: "1809" },
-            { line: "Blue Line", name: "60th", id: "1810" },
-            { line: "Blue Line", name: "82nd", id: "1811" },
-            { line: "Blue Line", name: "Gateway North", id: "1812" },
-            { line: "Blue Line", name: "Gateway Op Break", id: "1813" },
-            { line: "Blue Line", name: "Gateway Security", id: "1814" },
-            { line: "Blue Line", name: "Gateway Signal", id: "1815" },
-            { line: "Blue Line", name: "102nd EB", id: "1816" },
-            { line: "Blue Line", name: "102nd WB", id: "1817" },
-            { line: "Blue Line", name: "122nd EB", id: "1818" },
-            { line: "Blue Line", name: "122nd WB", id: "1819" },
-            { line: "Blue Line", name: "148th EB", id: "1820" },
-            { line: "Blue Line", name: "148th WB", id: "1821" },
-            { line: "Blue Line", name: "162nd EB", id: "1822" },
-            { line: "Blue Line", name: "162nd WB", id: "1823" },
-            { line: "Blue Line", name: "172nd EB", id: "1824" },
-            { line: "Blue Line", name: "172nd WB", id: "1825" },
-            { line: "Blue Line", name: "181st EB", id: "1826" },
-            { line: "Blue Line", name: "181st WB", id: "1827" },
-            { line: "Blue Line", name: "Rockwood EB", id: "1828" },
-            { line: "Blue Line", name: "Rockwood WB", id: "1829" },
-            { line: "Blue Line", name: "Civic Dr EB", id: "1878" },
-            { line: "Blue Line", name: "Civic Dr WB", id: "1879" },
-            { line: "Blue Line", name: "Gresham City Hall EB", id: "1830" },
-            { line: "Blue Line", name: "Gresham City Hall WB", id: "1831" },
-            { line: "Blue Line", name: "Gresham Central EB", id: "1832" },
-            { line: "Blue Line", name: "Gresham Central WB", id: "1833" },
-            { line: "Blue Line", name: "Cleveland", id: "1880" },
-            { line: "Yellow Line", name: "Expo North", id: "1887" },
-            { line: "Yellow Line", name: "Expo South", id: "1888" },
-            { line: "Yellow Line", name: "Delta Park", id: "1834" },
-            { line: "Yellow Line", name: "Kenton/Denver SB", id: "1835" },
-            { line: "Yellow Line", name: "Lombard NB", id: "1836" },
-            { line: "Yellow Line", name: "Lombard SB", id: "1837" },
-            { line: "Yellow Line", name: "Rosa Parks NB", id: "1838" },
-            { line: "Yellow Line", name: "Rosa Parks SB", id: "1839" },
-            { line: "Yellow Line", name: "Killingsworth NB", id: "1840" },
-            { line: "Yellow Line", name: "Killingsworth SB", id: "1841" },
-            { line: "Yellow Line", name: "Prescott", id: "1843" },
-            { line: "Yellow Line", name: "Overlook NB", id: "1844" },
-            { line: "Yellow Line", name: "Overlook SB", id: "1845" },
-            { line: "Yellow Line", name: "Albina-Mississippi", id: "1882" },
-            { line: "Yellow Line", name: "IRQ NB", id: "1842" },
-            { line: "Green Line", name: "Main St", id: "1846" },
-            { line: "Green Line", name: "Division", id: "1847" },
-            { line: "Green Line", name: "Powell", id: "1848" },
-            { line: "Green Line", name: "Holgate", id: "1849" },
-            { line: "Green Line", name: "Foster", id: "1850" },
-            { line: "Green Line", name: "Flavel", id: "1851" },
-            { line: "Green Line", name: "Fuller", id: "1852" },
-            { line: "Green Line", name: "CTC", id: "1853" },
-            { line: "Orange Line", name: "South Waterfront", id: "1891" },
-            { line: "Orange Line", name: "North Waterfront", id: "1892" },
-            { line: "Orange Line", name: "OMSI NB", id: "1854" },
-            { line: "Orange Line", name: "OMSI SB", id: "1855" },
-            { line: "Orange Line", name: "Clinton/12th", id: "1875" },
-            { line: "Orange Line", name: "17th/Rhine", id: "1893" },
-            { line: "Orange Line", name: "17th/Holgate", id: "1894" },
-            { line: "Orange Line", name: "Bybee", id: "1876" },
-            { line: "Orange Line", name: "Tacoma", id: "1858" },
-            { line: "Orange Line", name: "Milwaukie/Main", id: "1877" },
-            { line: "Orange Line", name: "Park Ave WB", id: "1856" },
-            { line: "Orange Line", name: "Park Ave EB", id: "1857" },
-            { line: "Red Line", name: "Park Rose", id: "1859" },
-            { line: "Miscellaneous", name: "Tigard Transit", id: "1860" },
-            { line: "Intercom", name: "Elmonica", id: "INT-ELM" },
-            { line: "Intercom", name: "122nd", id: "INT-122" },
-            { line: "Intercom", name: "148th", id: "INT-148" }
-        ];
-
-        function buildDefaultPhones() {
-            return rawPhoneData.map((item, index) => ({
-                id: index + 1,
-                line: item.line,
-                name: `${item.name} (${item.id})`,
-                status: "untested",
-                issue: "",
-                workOrder: ""
-            }));
-        }
-
-        let phones = buildDefaultPhones();
-        let lineOfficers = {};
-        let activeLineKeyForOfficer = null;
-        let lastWeekDataCache = null;
+        let phoneData = [];
+        let officerData = {};
         let activePhoneId = null;
+        let activeLineName = null;
+        let isViewerOnly = false;
 
-        phonesRef.on('value', (snapshot) => {
-            const val = snapshot.val();
-            let parsedData = Array.isArray(val) ? val : (val ? Object.values(val) : []);
-            
-            if (!parsedData || parsedData.length === 0 || !parsedData[0] || !parsedData[0].line || parsedData.length < rawPhoneData.length) {
-                phones = buildDefaultPhones();
-                phonesRef.set(phones);
-            } else {
-                phones = parsedData;
-            }
-            renderPhones();
-        });
-
-        officersRef.on('value', (snapshot) => {
-            lineOfficers = snapshot.val() || {};
-            renderPhones();
-        });
-
-        lastWeekRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            lastWeekDataCache = data;
-            if (data) {
-                document.getElementById("lastResetDate").innerText = data.resetDate || "N/A";
-                document.getElementById("lastWorkingCount").innerText = data.workingCount || "0/92";
-                document.getElementById("lastWorkingIntercomCount").innerText = data.workingIntercomCount || "0/3";
-                document.getElementById("lastIssueCount").innerText = data.issueCount || "0/95";
-                
-                let archiveIssuesHTML = "";
-                if (data.issuesList && data.issuesList.length > 0) {
-                    data.issuesList.forEach(item => {
-                        archiveIssuesHTML += `<li><strong>${item.name}</strong>: ${item.issue} (Work Order: ${item.workOrder})</li>`;
-                    });
-                }
-                document.getElementById("lastIssuesList").innerHTML = archiveIssuesHTML || "<li><em>No issues recorded last week.</em></li>";
-            }
-        });
-
-        notepadRef.on('value', (snapshot) => {
-            const text = snapshot.val();
-            const area = document.getElementById("sharedNotepadArea");
-            if (text !== null && area.value !== text) {
-                area.value = text;
-            }
-        });
-
-        document.getElementById("sharedNotepadArea").addEventListener("input", (e) => {
-            notepadRef.set(e.target.value);
-        });
-
-        function renderPhones() {
-            const container = document.getElementById("linesContainer");
-            container.innerHTML = "";
-            
-            let workingPhoneCount = 0;
-            let workingIntercomCount = 0;
-            let issueCount = 0;
-            let issuesHTML = "";
-
-            const totalPhones = 92;
-            const totalIntercoms = 3;
-            const totalDevices = totalPhones + totalIntercoms;
-
-            lineCategories.forEach(category => {
-                const categoryPhones = phones.filter(p => p && p.line === category.key);
-                if (categoryPhones.length === 0) return;
-
-                const section = document.createElement("div");
-                section.className = `line-section ${category.borderClass}`;
-
-                const header = document.createElement("div");
-                header.className = `line-header ${category.bgClass}`;
-                
-                const officerName = lineOfficers[category.key] || "";
-                const officerBadgeHTML = officerName ? `<span class="officer-tag">Assigned Officer: ${officerName}</span>` : "";
-
-                const officerBtn = isViewerOnly 
-                    ? '' 
-                    : `<button class="btn-officer ${officerName ? 'unassign' : ''}" onclick="toggleOfficerAssignment('${category.key}')">
-                        ${officerName ? 'Unassign Officer' : 'Assign Officer'}
-                       </button>`;
-
-                const iconHTML = category.icon ? `<span>${category.icon}</span>` : "";
-
-                header.innerHTML = `
-                    <div class="line-header-left">
-                        ${iconHTML}
-                        <span>${category.title}</span>
-                        ${officerBadgeHTML}
-                    </div>
-                    ${officerBtn}
-                `;
-                section.appendChild(header);
-
-                const grid = document.createElement("div");
-                grid.className = "phone-grid";
-
-                categoryPhones.forEach(phone => {
-                    const card = document.createElement("div");
-                    card.className = "phone-card";
-                    card.innerText = phone.name;
-                    
-                    const isIntercom = (phone.line === "Intercom");
-
-                    if (phone.status === "working") {
-                        card.classList.add("status-green");
-                        card.removeAttribute("title");
-                        if (isIntercom) {
-                            workingIntercomCount++;
-                        } else {
-                            workingPhoneCount++;
-                        }
-                    } else if (phone.status === "broken") {
-                        card.classList.add("status-red");
-                        card.title = `Issue: ${phone.issue || 'No description'}\nWork Order: ${phone.workOrder || 'N/A'}`;
-                        issueCount++;
-                        issuesHTML += `<li><strong>${phone.name}</strong>: ${phone.issue} (Work Order: ${phone.workOrder || 'None'})</li>`;
-                    } else {
-                        card.removeAttribute("title");
-                    }
-
-                    if (!isViewerOnly) {
-                        card.onclick = () => openCheckModal(phone.id);
-                    } else {
-                        card.style.cursor = "default";
-                    }
-                    grid.appendChild(card);
-                });
-
-                section.appendChild(grid);
-                container.appendChild(section);
-            });
-
-            document.getElementById("workingCount").innerText = `${workingPhoneCount}/${totalPhones}`;
-            document.getElementById("workingIntercomCount").innerText = `${workingIntercomCount}/${totalIntercoms}`;
-            document.getElementById("issueCount").innerText = `${issueCount}/${totalDevices}`;
-            document.getElementById("issuesList").innerHTML = issuesHTML || "<li><em>No issues reported yet.</em></li>";
-
-            document.getElementById("bossWorkingCount").innerText = `${workingPhoneCount}/${totalPhones}`;
-            document.getElementById("bossWorkingIntercomCount").innerText = `${workingIntercomCount}/${totalIntercoms}`;
-            document.getElementById("bossIssueCount").innerText = `${issueCount}/${totalDevices}`;
-            document.getElementById("bossIssuesList").innerHTML = issuesHTML || "<li><em>No active issues reported. All systems optimal!</em></li>";
-        }
-
-        /* Mode Selection Functions */
         function enableTrimetInteractiveMode() {
             isViewerOnly = false;
-            document.getElementById("welcomeModal").style.display = "none";
-            renderPhones();
+            document.getElementById('welcomeModal').style.display = 'none';
         }
 
         function enableAlliedViewerMode() {
             isViewerOnly = true;
-            document.getElementById("welcomeModal").style.display = "none";
-            renderPhones();
+            document.getElementById('welcomeModal').style.display = 'none';
         }
 
         function openBossSummary() {
-            document.getElementById("welcomeModal").style.display = "none";
-            document.getElementById("bossSummaryModal").style.display = "flex";
+            document.getElementById('welcomeModal').style.display = 'none';
+            document.getElementById('bossSummaryModal').style.display = 'flex';
         }
 
         function switchToTestingMode() {
-            document.getElementById("bossSummaryModal").style.display = "none";
+            document.getElementById('bossSummaryModal').style.display = 'none';
             enableTrimetInteractiveMode();
         }
 
-        /* Officer Assignment Handlers */
-        function toggleOfficerAssignment(lineKey) {
-            if (isViewerOnly) return;
-            const currentOfficer = lineOfficers[lineKey];
-            if (currentOfficer) {
-                db.ref(`line_officers/${lineKey}`).remove();
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        officersRef.on('value', (snapshot) => {
+            officerData = snapshot.val() || {};
+            renderUI();
+        });
+
+        phonesRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (!data) {
+                phonesRef.set(initialDirectory);
+                phoneData = initialDirectory;
             } else {
-                activeLineKeyForOfficer = lineKey;
-                document.getElementById("officerModalTitle").innerText = `Assign Officer to ${lineKey}`;
-                document.getElementById("officerInput").value = "";
-                document.getElementById("officerModal").style.display = "flex";
+                phoneData = data;
             }
-        }
+            renderUI();
+        });
 
-        function saveOfficerAssignment() {
-            const name = document.getElementById("officerInput").value.trim();
-            if (activeLineKeyForOfficer && name) {
-                db.ref(`line_officers/${activeLineKeyForOfficer}`).set(name);
-            }
-            closeOfficerModal();
-        }
+        function renderUI() {
+            const container = document.getElementById('linesContainer');
+            if (!container) return;
+            container.innerHTML = '';
 
-        function closeOfficerModal() {
-            activeLineKeyForOfficer = null;
-            document.getElementById("officerModal").style.display = "none";
-        }
-
-        /* Admin Password Protection */
-        function requestAdminAccess(actionCallback) {
-            if (isAdminAuthenticated) {
-                actionCallback();
-            } else {
-                pendingAdminAction = actionCallback;
-                document.getElementById("adminPasswordInput").value = "";
-                document.getElementById("adminErrorText").style.display = "none";
-                document.getElementById("adminModal").style.display = "flex";
-            }
-        }
-
-        function verifyAdminPassword() {
-            const entered = document.getElementById("adminPasswordInput").value;
-            if (entered === ADMIN_PASSWORD) {
-                isAdminAuthenticated = true;
-                closeAdminModal();
-                if (pendingAdminAction) {
-                    pendingAdminAction();
-                    pendingAdminAction = null;
+            const linesMap = {};
+            phoneData.forEach(item => {
+                if (!linesMap[item.line]) {
+                    linesMap[item.line] = {
+                        lineClass: item.lineClass,
+                        borderClass: item.borderClass,
+                        items: []
+                    };
                 }
-            } else {
-                document.getElementById("adminErrorText").style.display = "block";
-            }
-        }
-
-        function closeAdminModal() {
-            document.getElementById("adminModal").style.display = "none";
-        }
-
-        /* Testing Phone Flow */
-        function openCheckModal(id) {
-            if (isViewerOnly) return;
-            activePhoneId = id;
-            const phone = phones.find(p => p && p.id === id);
-            if (!phone) return;
-            document.getElementById("modalPhoneTitle").innerText = `Checking: ${phone.name}`;
-            document.getElementById("modalPrompt1").style.display = "flex";
-        }
-
-        function handleYes() {
-            const phone = phones.find(p => p && p.id === activePhoneId);
-            if (phone) {
-                phone.status = "working";
-                phone.issue = "";
-                phone.workOrder = "";
-                closeModals();
-                phonesRef.set(phones);
-            }
-        }
-
-        function handleNoPrompt() {
-            document.getElementById("modalPrompt1").style.display = "none";
-            document.getElementById("issueDescription").value = "";
-            document.getElementById("workOrderInput").value = "";
-
-            const phone = phones.find(p => p && p.id === activePhoneId);
-            const currentCard = document.getElementById("currentIssueCard");
-            const currentInfoText = document.getElementById("currentIssueInfoText");
-            const copyCurrentBtn = document.getElementById("btnCopyCurrentIssue");
-
-            if (phone && phone.status === "broken") {
-                currentCard.style.display = "block";
-                currentInfoText.innerHTML = `⚠️ <strong>Issue:</strong> ${phone.issue || "No description"}<br>🎫 <strong>Work Order:</strong> ${phone.workOrder || "N/A"}`;
-                copyCurrentBtn.dataset.issue = phone.issue || "";
-                copyCurrentBtn.dataset.workorder = phone.workOrder || "";
-            } else {
-                currentCard.style.display = "none";
-            }
-
-            const copyLastBtn = document.getElementById("btnCopyLastWeek");
-            const lastInfoText = document.getElementById("lastWeekInfoText");
-
-            let matchedLastWeekItem = null;
-            if (lastWeekDataCache && lastWeekDataCache.issuesList) {
-                matchedLastWeekItem = lastWeekDataCache.issuesList.find(item => item.name === phone.name);
-            }
-
-            if (matchedLastWeekItem) {
-                lastInfoText.innerHTML = `⚠️ <strong>Issue:</strong> ${matchedLastWeekItem.issue}<br>🎫 <strong>Work Order:</strong> ${matchedLastWeekItem.workOrder}`;
-                copyLastBtn.style.display = "inline-block";
-                copyLastBtn.dataset.issue = matchedLastWeekItem.issue;
-                copyLastBtn.dataset.workorder = matchedLastWeekItem.workOrder;
-            } else {
-                lastInfoText.innerHTML = `✅ <em>No issues flagged for this device last week.</em>`;
-                copyLastBtn.style.display = "none";
-            }
-
-            document.getElementById("modalPrompt2").style.display = "flex";
-        }
-
-        function copyCurrentIssueData() {
-            const btn = document.getElementById("btnCopyCurrentIssue");
-            if (btn.dataset.issue) {
-                document.getElementById("issueDescription").value = btn.dataset.issue;
-                document.getElementById("workOrderInput").value = btn.dataset.workorder;
-            }
-        }
-
-        function copyLastWeekData() {
-            const copyBtn = document.getElementById("btnCopyLastWeek");
-            if (copyBtn.dataset.issue) {
-                document.getElementById("issueDescription").value = copyBtn.dataset.issue;
-                document.getElementById("workOrderInput").value = copyBtn.dataset.workorder;
-            }
-        }
-
-        function resetSinglePhone() {
-            const phone = phones.find(p => p && p.id === activePhoneId);
-            if (phone) {
-                phone.status = "untested";
-                phone.issue = "";
-                phone.workOrder = "";
-                closeModals();
-                phonesRef.set(phones);
-            }
-        }
-
-        function saveIssue() {
-            const phone = phones.find(p => p && p.id === activePhoneId);
-            if (phone) {
-                phone.status = "broken";
-                phone.issue = document.getElementById("issueDescription").value || "No description provided";
-                phone.workOrder = document.getElementById("workOrderInput").value || "N/A";
-                closeModals();
-                phonesRef.set(phones);
-            }
-        }
-
-        function closeModals() {
-            document.getElementById("modalPrompt1").style.display = "none";
-            document.getElementById("modalPrompt2").style.display = "none";
-        }
-
-        function openChangelog() { document.getElementById("changelogModal").style.display = "flex"; }
-        function closeChangelog() { document.getElementById("changelogModal").style.display = "none"; }
-        function openNotepad() { document.getElementById("notepadModal").style.display = "flex"; }
-        function closeNotepad() { document.getElementById("notepadModal").style.display = "none"; }
-
-        /* Reset & Restore Menu Handlers */
-        function openResetMenu() {
-            document.getElementById("resetControlModal").style.display = "flex";
-        }
-
-        function closeResetMenu() {
-            document.getElementById("resetControlModal").style.display = "none";
-        }
-
-        function confirmResetAll() {
-            if (confirm("Are you sure you want to reset all progress for the week? Current progress will be backed up.")) {
-                resetAll();
-                closeResetMenu();
-            }
-        }
-
-        function resetAll() {
-            let workingPhoneCount = 0;
-            let workingIntercomCount = 0;
-            let issueCount = 0;
-            let issuesList = [];
-
-            const totalPhones = 92;
-            const totalIntercoms = 3;
-            const totalDevices = totalPhones + totalIntercoms;
-
-            const fullPhoneBackup = JSON.parse(JSON.stringify(phones));
-
-            phones.forEach(p => {
-                const isIntercom = (p.line === "Intercom");
-                if (p.status === "working") {
-                    if (isIntercom) workingIntercomCount++;
-                    else workingPhoneCount++;
-                }
-                if (p.status === "broken") {
-                    issueCount++;
-                    issuesList.push({
-                        name: p.name,
-                        issue: p.issue || "No description provided",
-                        workOrder: p.workOrder || "N/A"
-                    });
-                }
+                linesMap[item.line].items.push(item);
             });
 
-            const archiveData = {
-                resetDate: new Date().toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }),
-                workingCount: `${workingPhoneCount}/${totalPhones}`,
-                workingIntercomCount: `${workingIntercomCount}/${totalIntercoms}`,
-                issueCount: `${issueCount}/${totalDevices}`,
-                issuesList: issuesList,
-                fullPhoneBackup: fullPhoneBackup
-            };
+            let workingPhones = 0;
+            let workingIntercoms = 0;
+            let issuesCount = 0;
+            const issuesList = document.getElementById('issuesList');
+            const bossIssuesList = document.getElementById('bossIssuesList');
 
-            lastWeekRef.set(archiveData).then(() => {
-                phones = buildDefaultPhones();
-                phonesRef.set(phones);
-            });
+            if (issuesList) issuesList.innerHTML = '';
+            if (bossIssuesList) bossIssuesList.innerHTML = '';
+
+            for (const [lineName, lineGroup] of Object.entries(linesMap)) {
+                const lineSection = document.createElement('div');
+                lineSection.className = `line-section ${lineGroup.borderClass}`;
+
+                const officerTagText = officerData[lineName] ? `Inspector: ${officerData[lineName]}` : '+ Add Inspector';
+
+                lineSection.innerHTML = `
+                    <div class="line-header ${lineGroup.lineClass}">
+                        <div class="line-header-left">
+                            <span>${lineName}</span>
+                            <span class="officer-tag" onclick="openOfficerModal('${lineName}')">${officerTagText}</span>
+                        </div>
+                    </div>
+                    <div class="phone-grid" id="grid-${lineName.replace(/\s+/g, '-')}"></div>
+                `;
+
+                container.appendChild(lineSection);
+                const grid = document.getElementById(`grid-${lineName.replace(/\s+/g, '-')}`);
+
+                lineGroup.items.forEach(phone => {
+                    let statusClass = '';
+                    if (phone.status === 'working') {
+                        statusClass = 'status-green';
+                        if (phone.line === 'Intercom') workingIntercoms++;
+                        else workingPhones++;
+                    } else if (phone.status === 'issue') {
+                        statusClass = 'status-red';
+                        issuesCount++;
+
+                        const li = document.createElement('li');
+                        li.textContent = `${phone.name}: ${phone.issue || 'Issue flagged'}`;
+                        if (issuesList) issuesList.appendChild(li);
+                        if (bossIssuesList) bossIssuesList.appendChild(li.cloneNode(true));
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = `phone-card ${statusClass}`;
+                    card.textContent = phone.name;
+                    card.onclick = () => handleCardClick(phone.id);
+                    grid.appendChild(card);
+                });
+            }
+
+            if (issuesList && issuesList.children.length === 0) {
+                issuesList.innerHTML = '<li><em>No issues reported yet.</em></li>';
+            }
+            if (bossIssuesList && bossIssuesList.children.length === 0) {
+                bossIssuesList.innerHTML = '<li><em>No issues reported yet.</em></li>';
+            }
+
+            document.getElementById('workingCount').innerText = `${workingPhones}/92`;
+            document.getElementById('workingIntercomCount').innerText = `${workingIntercomCount}/3`;
+            document.getElementById('issueCount').innerText = `${issuesCount}/95`;
+
+            document.getElementById('bossWorkingCount').innerText = `${workingPhones}/92`;
+            document.getElementById('bossWorkingIntercomCount').innerText = `${workingIntercomCount}/3`;
+            document.getElementById('bossIssueCount').innerText = `${issuesCount}/95`;
         }
 
-        function undoResetProgress() {
-            if (!lastWeekDataCache || !lastWeekDataCache.fullPhoneBackup) {
-                alert("No previous backup snapshot available to undo!");
+        function handleCardClick(phoneId) {
+            if (isViewerOnly) {
+                alert('You are currently in Allied Read-Only Viewer mode.');
                 return;
             }
+            activePhoneId = phoneId;
+            const phone = phoneData.find(p => p.id === phoneId);
+            if (!phone) return;
 
-            if (confirm("⚠️ PANIC RESTORE: Are you sure you want to restore the checklist to its pre-reset state?")) {
-                phonesRef.set(lastWeekDataCache.fullPhoneBackup).then(() => {
-                    alert("System successfully restored to previous snapshot!");
-                    closeResetMenu();
-                });
+            document.getElementById('modalPhoneTitle').innerText = `Check: ${phone.name}`;
+            document.getElementById('statusModal').style.display = 'flex';
+        }
+
+        function setPhoneStatus(status, issueText = '') {
+            const index = phoneData.findIndex(p => p.id === activePhoneId);
+            if (index !== -1) {
+                phoneData[index].status = status;
+                phoneData[index].issue = issueText;
+                phonesRef.set(phoneData);
+            }
+            closeModal('statusModal');
+            closeModal('issueModal');
+        }
+
+        function openIssueModal() {
+            closeModal('statusModal');
+            const phone = phoneData.find(p => p.id === activePhoneId);
+            if (phone) {
+                document.getElementById('issuePhoneTitle').innerText = `Report Issue: ${phone.name}`;
+                document.getElementById('issueInput').value = phone.issue || '';
+            }
+            document.getElementById('issueModal').style.display = 'flex';
+        }
+
+        function submitIssue() {
+            const issueText = document.getElementById('issueInput').value.trim();
+            if (!issueText) {
+                alert('Please describe the issue before saving.');
+                return;
+            }
+            setPhoneStatus('issue', issueText);
+        }
+
+        function openOfficerModal(lineName) {
+            if (isViewerOnly) return;
+            activeLineName = lineName;
+            document.getElementById('officerLineTitle').innerText = `Assign Inspector: ${lineName}`;
+            document.getElementById('officerInput').value = officerData[lineName] || '';
+            document.getElementById('officerModal').style.display = 'flex';
+        }
+
+        function saveOfficerTag() {
+            const name = document.getElementById('officerInput').value.trim();
+            if (activeLineName) {
+                if (name) {
+                    officerData[activeLineName] = name;
+                } else {
+                    delete officerData[activeLineName];
+                }
+                officersRef.set(officerData);
+            }
+            closeModal('officerModal');
+        }
+
+        function promptReset() {
+            if (isViewerOnly) {
+                alert('Viewer mode cannot reset checks.');
+                return;
+            }
+            if (confirm('Are you sure you want to reset all phone check statuses for a new check cycle?')) {
+                const resetData = phoneData.map(p => ({ ...p, status: 'unchecked', issue: '' }));
+                phonesRef.set(resetData);
             }
         }
     </script>
