@@ -80,7 +80,7 @@
         .bg-yellow { background-color: #FEE12B; color: #111; }
         .bg-green { background-color: #1e5631; color: #ffffff; }
         .bg-orange { background-color: #e67e22; }
-        .bg-red { background-color: #d9534f; }
+        .bg-red { background-color: #b02a2a; }
         .bg-misc { background-color: #7f8c8d; }
         .bg-intercom { background-color: #8e44ad; }
 
@@ -88,7 +88,7 @@
         .line-yellow { border-left: 6px solid #FEE12B; }
         .line-green { border-left: 6px solid #1e5631; }
         .line-orange { border-left: 6px solid #e67e22; }
-        .line-red { border-left: 6px solid #d9534f; }
+        .line-red { border-left: 6px solid #b02a2a; }
         .line-misc { border-left: 6px solid #7f8c8d; }
         .line-intercom { border-left: 6px solid #8e44ad; }
 
@@ -313,7 +313,7 @@
             <p>What is wrong with this device?</p>
             <input type="text" id="issueDescription" placeholder="e.g., No dial tone, static on line">
             
-            <p>Need to create a ticket? <a href="https://trimet.atlassian.net/servicedesk/customer/portal/9/group/1051/create/136" target="_blank" style="color: #007bff;">Click here to place a work order</a></p>
+            <p>Need to create a ticket? <a href="https://trimet.atlassian.net/servicedesk/customer/portal/3/group/9/create/50" target="_blank" style="color: #007bff;">Click here to place a work order</a></p>
             
             <label for="workOrderInput"><strong>Work Order Number:</strong></label>
             <input type="text" id="workOrderInput" placeholder="Paste work order # here">
@@ -592,110 +592,118 @@
         lastWeekRef.on('value', (snapshot) => {
             const data = snapshot.val();
             lastWeekDataCache = data;
-            if (data) {
-                document.getElementById("lastResetDate").innerText = data.resetDate || "N/A";
-                document.getElementById("lastWorkingCount").innerText = data.workingCount || "0/92";
-                document.getElementById("lastWorkingIntercomCount").innerText = data.workingIntercomCount || "0/3";
-                document.getElementById("lastIssueCount").innerText = data.issueCount || "0/95";
-                
-                let archiveIssuesHTML = "";
-                if (data.issuesList && data.issuesList.length > 0) {
-                    data.issuesList.forEach(item => {
-                        archiveIssuesHTML += `<li><strong>${item.name}</strong>: ${item.issue} (Work Order: ${item.workOrder})</li>`;
-                    });
-                }
-                document.getElementById("lastIssuesList").innerHTML = archiveIssuesHTML || "<li><em>No issues recorded last week.</em></li>";
+            const resetDateEl = document.getElementById('lastResetDate');
+            const lastWorkingEl = document.getElementById('lastWorkingCount');
+            const lastIntercomEl = document.getElementById('lastWorkingIntercomCount');
+            const lastIssueEl = document.getElementById('lastIssueCount');
+            const lastListEl = document.getElementById('lastIssuesList');
+
+            if (!data) {
+                resetDateEl.innerText = "N/A";
+                lastWorkingEl.innerText = "N/A";
+                if (lastIntercomEl) lastIntercomEl.innerText = "N/A";
+                lastIssueEl.innerText = "N/A";
+                lastListEl.innerHTML = "<li><em>No previous record found.</em></li>";
+                return;
+            }
+
+            resetDateEl.innerText = data.resetDate || "N/A";
+            lastWorkingEl.innerText = `${data.workingCount || 0}/92`;
+            if (lastIntercomEl) lastIntercomEl.innerText = `${data.workingIntercomCount || 0}/3`;
+            lastIssueEl.innerText = `${data.issueCount || 0}/95`;
+
+            lastListEl.innerHTML = "";
+            if (!data.issues || data.issues.length === 0) {
+                lastListEl.innerHTML = "<li><em>No issues reported last week.</em></li>";
+            } else {
+                data.issues.forEach(item => {
+                    const li = document.createElement('li');
+                    let woText = item.workOrder ? ` [WO#: ${item.workOrder}]` : '';
+                    li.innerText = `${item.name}: ${item.issue}${woText}`;
+                    lastListEl.appendChild(li);
+                });
             }
         });
 
+        /* Shared Notepad Listener */
+        const notepadArea = document.getElementById('sharedNotepadArea');
         notepadRef.on('value', (snapshot) => {
-            const text = snapshot.val();
-            const area = document.getElementById("sharedNotepadArea");
-            if (text !== null && area.value !== text) {
-                area.value = text;
+            const val = snapshot.val() || "";
+            if (document.activeElement !== notepadArea) {
+                notepadArea.value = val;
             }
         });
 
-        document.getElementById("sharedNotepadArea").addEventListener("input", (e) => {
+        notepadArea.addEventListener('input', (e) => {
             notepadRef.set(e.target.value);
         });
 
         function renderPhones() {
-            const container = document.getElementById("linesContainer");
+            const container = document.getElementById('linesContainer');
             container.innerHTML = "";
-            
-            let workingPhoneCount = 0;
+
+            let workingCount = 0;
             let workingIntercomCount = 0;
             let issueCount = 0;
-            let issuesHTML = "";
+            const issuesList = document.getElementById('issuesList');
+            const bossIssuesList = document.getElementById('bossIssuesList');
+            
+            issuesList.innerHTML = "";
+            if (bossIssuesList) bossIssuesList.innerHTML = "";
 
-            const totalPhones = 92;
-            const totalIntercoms = 3;
-            const totalDevices = totalPhones + totalIntercoms;
+            lineCategories.forEach(cat => {
+                const linePhones = phones.filter(p => p.line === cat.key);
+                if (linePhones.length === 0) return;
 
-            lineCategories.forEach(category => {
-                const categoryPhones = phones.filter(p => p && p.line === category.key);
-                if (categoryPhones.length === 0) return;
+                const section = document.createElement('div');
+                section.className = `line-section ${cat.borderClass}`;
 
-                const section = document.createElement("div");
-                section.className = `line-section ${category.borderClass}`;
-
-                const header = document.createElement("div");
-                header.className = `line-header ${category.bgClass}`;
+                const header = document.createElement('div');
+                header.className = `line-header ${cat.bgClass}`;
                 
-                const officerName = lineOfficers[category.key] || "";
-                const officerBadgeHTML = officerName ? `<span class="officer-tag">Assigned Officer: ${officerName}</span>` : "";
-
-                const officerBtn = isViewerOnly 
-                    ? '' 
-                    : `<button class="btn-officer ${officerName ? 'unassign' : ''}" onclick="toggleOfficerAssignment('${category.key}')">
-                        ${officerName ? 'Unassign Officer' : 'Assign Officer'}
-                       </button>`;
-
-                const iconHTML = category.icon ? `<span>${category.icon}</span>` : "";
+                const officerName = lineOfficers[cat.key] || "";
+                const officerBadgeHTML = officerName ? `<span class="officer-tag">👮 Officer: ${escapeHTML(officerName)}</span>` : "";
 
                 header.innerHTML = `
                     <div class="line-header-left">
-                        ${iconHTML}
-                        <span>${category.title}</span>
+                        <span>${cat.icon} ${cat.title}</span>
                         ${officerBadgeHTML}
                     </div>
-                    ${officerBtn}
+                    <button class="btn-officer ${officerName ? 'unassign' : ''}" onclick="openOfficerModal('${cat.key}')">
+                        ${officerName ? 'Edit Officer' : '+ Assign Officer'}
+                    </button>
                 `;
                 section.appendChild(header);
 
-                const grid = document.createElement("div");
+                const grid = document.createElement('div');
                 grid.className = "phone-grid";
 
-                categoryPhones.forEach(phone => {
-                    const card = document.createElement("div");
+                linePhones.forEach(phone => {
+                    const card = document.createElement('div');
                     card.className = "phone-card";
                     card.innerText = phone.name;
-                    
-                    const isIntercom = (phone.line === "Intercom");
 
                     if (phone.status === "working") {
                         card.classList.add("status-green");
-                        card.removeAttribute("title");
-                        if (isIntercom) {
-                            workingIntercomCount++;
-                        } else {
-                            workingPhoneCount++;
-                        }
-                    } else if (phone.status === "broken") {
+                        if (phone.line === "Intercom") workingIntercomCount++;
+                        else workingCount++;
+                    } else if (phone.status === "issue") {
                         card.classList.add("status-red");
-                        card.title = `Issue: ${phone.issue || 'No description'}\nWork Order: ${phone.workOrder || 'N/A'}`;
                         issueCount++;
-                        issuesHTML += `<li><strong>${phone.name}</strong>: ${phone.issue} (Work Order: ${phone.workOrder || 'None'})</li>`;
-                    } else {
-                        card.removeAttribute("title");
+
+                        const li = document.createElement('li');
+                        let woText = phone.workOrder ? ` [WO#: ${phone.workOrder}]` : '';
+                        li.innerText = `${phone.name}: ${phone.issue}${woText}`;
+                        issuesList.appendChild(li);
+
+                        if (bossIssuesList) {
+                            const bossLi = document.createElement('li');
+                            bossLi.innerText = `${phone.name}: ${phone.issue}${woText}`;
+                            bossIssuesList.appendChild(bossLi);
+                        }
                     }
 
-                    if (!isViewerOnly) {
-                        card.onclick = () => openCheckModal(phone.id);
-                    } else {
-                        card.style.cursor = "default";
-                    }
+                    card.onclick = () => openPrompt(phone.id);
                     grid.appendChild(card);
                 });
 
@@ -703,277 +711,287 @@
                 container.appendChild(section);
             });
 
-            document.getElementById("workingCount").innerText = `${workingPhoneCount}/${totalPhones}`;
-            document.getElementById("workingIntercomCount").innerText = `${workingIntercomCount}/${totalIntercoms}`;
-            document.getElementById("issueCount").innerText = `${issueCount}/${totalDevices}`;
-            document.getElementById("issuesList").innerHTML = issuesHTML || "<li><em>No issues reported yet.</em></li>";
+            document.getElementById('workingCount').innerText = `${workingCount}/92`;
+            if (document.getElementById('workingIntercomCount')) {
+                document.getElementById('workingIntercomCount').innerText = `${workingIntercomCount}/3`;
+            }
+            document.getElementById('issueCount').innerText = `${issueCount}/95`;
 
-            document.getElementById("bossWorkingCount").innerText = `${workingPhoneCount}/${totalPhones}`;
-            document.getElementById("bossWorkingIntercomCount").innerText = `${workingIntercomCount}/${totalIntercoms}`;
-            document.getElementById("bossIssueCount").innerText = `${issueCount}/${totalDevices}`;
-            document.getElementById("bossIssuesList").innerHTML = issuesHTML || "<li><em>No active issues reported. All systems optimal!</em></li>";
+            if (document.getElementById('bossWorkingCount')) {
+                document.getElementById('bossWorkingCount').innerText = `${workingCount}/92`;
+                document.getElementById('bossWorkingIntercomCount').innerText = `${workingIntercomCount}/3`;
+                document.getElementById('bossIssueCount').innerText = `${issueCount}/95`;
+            }
+
+            if (issueCount === 0) {
+                issuesList.innerHTML = "<li><em>No issues reported yet.</em></li>";
+                if (bossIssuesList) bossIssuesList.innerHTML = "<li><em>No active issues reported across any lines.</em></li>";
+            }
         }
 
-        /* Mode Selection Functions */
+        function openPrompt(id) {
+            if (isViewerOnly) return;
+            activePhoneId = id;
+            const phone = phones.find(p => p.id === activePhoneId);
+            document.getElementById('modalPhoneTitle').innerText = phone.name;
+            document.getElementById('modalPrompt1').style.display = "flex";
+        }
+
+        function handleYes() {
+            const phone = phones.find(p => p.id === activePhoneId);
+            phone.status = "working";
+            phone.issue = "";
+            phone.workOrder = "";
+            saveData();
+            closeModals();
+        }
+
+        function handleNoPrompt() {
+            document.getElementById('modalPrompt1').style.display = "none";
+            const phone = phones.find(p => p.id === activePhoneId);
+            
+            const descInput = document.getElementById('issueDescription');
+            const woInput = document.getElementById('workOrderInput');
+            descInput.value = phone.issue || "";
+            woInput.value = phone.workOrder || "";
+
+            const currentCard = document.getElementById('currentIssueCard');
+            const currentText = document.getElementById('currentIssueInfoText');
+            if (phone.status === "issue" && phone.issue) {
+                currentCard.style.display = "block";
+                let woStr = phone.workOrder ? ` (WO#: ${phone.workOrder})` : '';
+                currentText.innerText = `"${phone.issue}"${woStr}`;
+            } else {
+                currentCard.style.display = "none";
+            }
+
+            const lastText = document.getElementById('lastWeekInfoText');
+            const btnCopyLast = document.getElementById('btnCopyLastWeek');
+
+            if (lastWeekDataCache && lastWeekDataCache.issues) {
+                const prevIssueObj = lastWeekDataCache.issues.find(item => item.name === phone.name);
+                if (prevIssueObj) {
+                    let woStr = prevIssueObj.workOrder ? ` (WO#: ${prevIssueObj.workOrder})` : '';
+                    lastText.innerText = `"${prevIssueObj.issue}"${woStr}`;
+                    btnCopyLast.style.display = "inline-block";
+                } else {
+                    lastText.innerText = "No issue recorded last week (Working).";
+                    btnCopyLast.style.display = "none";
+                }
+            } else {
+                lastText.innerText = "No historical log available.";
+                btnCopyLast.style.display = "none";
+            }
+
+            document.getElementById('modalPrompt2').style.display = "flex";
+        }
+
+        function copyCurrentIssueData() {
+            const phone = phones.find(p => p.id === activePhoneId);
+            if (phone) {
+                if (phone.issue) document.getElementById('issueDescription').value = phone.issue;
+                if (phone.workOrder) document.getElementById('workOrderInput').value = phone.workOrder;
+            }
+        }
+
+        function copyLastWeekData() {
+            const phone = phones.find(p => p.id === activePhoneId);
+            if (phone && lastWeekDataCache && lastWeekDataCache.issues) {
+                const prevIssueObj = lastWeekDataCache.issues.find(item => item.name === phone.name);
+                if (prevIssueObj) {
+                    if (prevIssueObj.issue) document.getElementById('issueDescription').value = prevIssueObj.issue;
+                    if (prevIssueObj.workOrder) document.getElementById('workOrderInput').value = prevIssueObj.workOrder;
+                }
+            }
+        }
+
+        function saveIssue() {
+            const desc = document.getElementById('issueDescription').value.trim();
+            const wo = document.getElementById('workOrderInput').value.trim();
+            
+            if (desc === "") {
+                alert("Please provide a description of the issue.");
+                return;
+            }
+
+            const phone = phones.find(p => p.id === activePhoneId);
+            phone.status = "issue";
+            phone.issue = desc;
+            phone.workOrder = wo;
+
+            saveData();
+            closeModals();
+        }
+
+        function resetSinglePhone() {
+            const phone = phones.find(p => p.id === activePhoneId);
+            if (phone) {
+                phone.status = "untested";
+                phone.issue = "";
+                phone.workOrder = "";
+                saveData();
+            }
+            closeModals();
+        }
+
+        /* Role & Welcome Screen Operations */
+        function openBossSummary() {
+            document.getElementById('welcomeModal').style.display = "none";
+            document.getElementById('bossSummaryModal').style.display = "flex";
+        }
+
         function enableTrimetInteractiveMode() {
             isViewerOnly = false;
-            document.getElementById("welcomeModal").style.display = "none";
-            renderPhones();
+            document.getElementById('welcomeModal').style.display = "none";
         }
 
         function enableAlliedViewerMode() {
             isViewerOnly = true;
-            document.getElementById("welcomeModal").style.display = "none";
-            renderPhones();
-        }
-
-        function openBossSummary() {
-            document.getElementById("welcomeModal").style.display = "none";
-            document.getElementById("bossSummaryModal").style.display = "flex";
+            document.getElementById('welcomeModal').style.display = "none";
         }
 
         function switchToTestingMode() {
-            document.getElementById("bossSummaryModal").style.display = "none";
-            enableTrimetInteractiveMode();
+            isViewerOnly = false;
+            document.getElementById('bossSummaryModal').style.display = "none";
         }
 
-        /* Officer Assignment Handlers */
-        function toggleOfficerAssignment(lineKey) {
+        /* Officer Modal Operations */
+        function openOfficerModal(lineKey) {
             if (isViewerOnly) return;
-            const currentOfficer = lineOfficers[lineKey];
-            if (currentOfficer) {
-                db.ref(`line_officers/${lineKey}`).remove();
-            } else {
-                activeLineKeyForOfficer = lineKey;
-                document.getElementById("officerModalTitle").innerText = `Assign Officer to ${lineKey}`;
-                document.getElementById("officerInput").value = "";
-                document.getElementById("officerModal").style.display = "flex";
-            }
+            activeLineKeyForOfficer = lineKey;
+            document.getElementById('officerModalTitle').innerText = `Assign Officer (${lineKey})`;
+            document.getElementById('officerInput').value = lineOfficers[lineKey] || "";
+            document.getElementById('officerModal').style.display = "flex";
+        }
+
+        function closeOfficerModal() {
+            document.getElementById('officerModal').style.display = "none";
+            activeLineKeyForOfficer = null;
         }
 
         function saveOfficerAssignment() {
-            const name = document.getElementById("officerInput").value.trim();
-            if (activeLineKeyForOfficer && name) {
-                db.ref(`line_officers/${activeLineKeyForOfficer}`).set(name);
+            const val = document.getElementById('officerInput').value.trim();
+            if (activeLineKeyForOfficer) {
+                if (val === "") {
+                    delete lineOfficers[activeLineKeyForOfficer];
+                } else {
+                    lineOfficers[activeLineKeyForOfficer] = val;
+                }
+                officersRef.set(lineOfficers);
             }
             closeOfficerModal();
         }
 
-        function closeOfficerModal() {
-            activeLineKeyForOfficer = null;
-            document.getElementById("officerModal").style.display = "none";
-        }
-
-        /* Admin Password Protection */
+        /* Admin & Reset Controls */
         function requestAdminAccess(actionCallback) {
             if (isAdminAuthenticated) {
                 actionCallback();
             } else {
                 pendingAdminAction = actionCallback;
-                document.getElementById("adminPasswordInput").value = "";
-                document.getElementById("adminErrorText").style.display = "none";
-                document.getElementById("adminModal").style.display = "flex";
+                document.getElementById('adminPasswordInput').value = "";
+                document.getElementById('adminErrorText').style.display = "none";
+                document.getElementById('adminModal').style.display = "flex";
             }
         }
 
         function verifyAdminPassword() {
-            const entered = document.getElementById("adminPasswordInput").value;
-            if (entered === ADMIN_PASSWORD) {
+            const pwd = document.getElementById('adminPasswordInput').value;
+            if (pwd === ADMIN_PASSWORD) {
                 isAdminAuthenticated = true;
                 closeAdminModal();
                 if (pendingAdminAction) {
-                    pendingAdminAction();
+                    const action = pendingAdminAction;
                     pendingAdminAction = null;
+                    action();
                 }
             } else {
-                document.getElementById("adminErrorText").style.display = "block";
+                document.getElementById('adminErrorText').style.display = "block";
             }
         }
 
         function closeAdminModal() {
-            document.getElementById("adminModal").style.display = "none";
+            document.getElementById('adminModal').style.display = "none";
+            pendingAdminAction = null;
         }
 
-        /* Testing Phone Flow */
-        function openCheckModal(id) {
-            if (isViewerOnly) return;
-            activePhoneId = id;
-            const phone = phones.find(p => p && p.id === id);
-            if (!phone) return;
-            document.getElementById("modalPhoneTitle").innerText = `Checking: ${phone.name}`;
-            document.getElementById("modalPrompt1").style.display = "flex";
-        }
-
-        function handleYes() {
-            const phone = phones.find(p => p && p.id === activePhoneId);
-            if (phone) {
-                phone.status = "working";
-                phone.issue = "";
-                phone.workOrder = "";
-                closeModals();
-                phonesRef.set(phones);
-            }
-        }
-
-        function handleNoPrompt() {
-            document.getElementById("modalPrompt1").style.display = "none";
-            document.getElementById("issueDescription").value = "";
-            document.getElementById("workOrderInput").value = "";
-
-            const phone = phones.find(p => p && p.id === activePhoneId);
-            const currentCard = document.getElementById("currentIssueCard");
-            const currentInfoText = document.getElementById("currentIssueInfoText");
-            const copyCurrentBtn = document.getElementById("btnCopyCurrentIssue");
-
-            if (phone && phone.status === "broken") {
-                currentCard.style.display = "block";
-                currentInfoText.innerHTML = `⚠️ <strong>Issue:</strong> ${phone.issue || "No description"}<br>🎫 <strong>Work Order:</strong> ${phone.workOrder || "N/A"}`;
-                copyCurrentBtn.dataset.issue = phone.issue || "";
-                copyCurrentBtn.dataset.workorder = phone.workOrder || "";
-            } else {
-                currentCard.style.display = "none";
-            }
-
-            const copyLastBtn = document.getElementById("btnCopyLastWeek");
-            const lastInfoText = document.getElementById("lastWeekInfoText");
-
-            let matchedLastWeekItem = null;
-            if (lastWeekDataCache && lastWeekDataCache.issuesList) {
-                matchedLastWeekItem = lastWeekDataCache.issuesList.find(item => item.name === phone.name);
-            }
-
-            if (matchedLastWeekItem) {
-                lastInfoText.innerHTML = `⚠️ <strong>Issue:</strong> ${matchedLastWeekItem.issue}<br>🎫 <strong>Work Order:</strong> ${matchedLastWeekItem.workOrder}`;
-                copyLastBtn.style.display = "inline-block";
-                copyLastBtn.dataset.issue = matchedLastWeekItem.issue;
-                copyLastBtn.dataset.workorder = matchedLastWeekItem.workOrder;
-            } else {
-                lastInfoText.innerHTML = `✅ <em>No issues flagged for this device last week.</em>`;
-                copyLastBtn.style.display = "none";
-            }
-
-            document.getElementById("modalPrompt2").style.display = "flex";
-        }
-
-        function copyCurrentIssueData() {
-            const btn = document.getElementById("btnCopyCurrentIssue");
-            if (btn.dataset.issue) {
-                document.getElementById("issueDescription").value = btn.dataset.issue;
-                document.getElementById("workOrderInput").value = btn.dataset.workorder;
-            }
-        }
-
-        function copyLastWeekData() {
-            const copyBtn = document.getElementById("btnCopyLastWeek");
-            if (copyBtn.dataset.issue) {
-                document.getElementById("issueDescription").value = copyBtn.dataset.issue;
-                document.getElementById("workOrderInput").value = copyBtn.dataset.workorder;
-            }
-        }
-
-        function resetSinglePhone() {
-            const phone = phones.find(p => p && p.id === activePhoneId);
-            if (phone) {
-                phone.status = "untested";
-                phone.issue = "";
-                phone.workOrder = "";
-                closeModals();
-                phonesRef.set(phones);
-            }
-        }
-
-        function saveIssue() {
-            const phone = phones.find(p => p && p.id === activePhoneId);
-            if (phone) {
-                phone.status = "broken";
-                phone.issue = document.getElementById("issueDescription").value || "No description provided";
-                phone.workOrder = document.getElementById("workOrderInput").value || "N/A";
-                closeModals();
-                phonesRef.set(phones);
-            }
-        }
-
-        function closeModals() {
-            document.getElementById("modalPrompt1").style.display = "none";
-            document.getElementById("modalPrompt2").style.display = "none";
-        }
-
-        function openChangelog() { document.getElementById("changelogModal").style.display = "flex"; }
-        function closeChangelog() { document.getElementById("changelogModal").style.display = "none"; }
-        function openNotepad() { document.getElementById("notepadModal").style.display = "flex"; }
-        function closeNotepad() { document.getElementById("notepadModal").style.display = "none"; }
-
-        /* Reset & Restore Menu Handlers */
         function openResetMenu() {
-            document.getElementById("resetControlModal").style.display = "flex";
+            document.getElementById('resetControlModal').style.display = "flex";
         }
 
         function closeResetMenu() {
-            document.getElementById("resetControlModal").style.display = "none";
+            document.getElementById('resetControlModal').style.display = "none";
         }
 
         function confirmResetAll() {
-            if (confirm("Are you sure you want to reset all progress for the week? Current progress will be backed up.")) {
-                resetAll();
-                closeResetMenu();
-            }
-        }
+            if (!confirm("Are you sure you want to reset all phones to untested? Current summary will be archived.")) return;
 
-        function resetAll() {
-            let workingPhoneCount = 0;
+            let workingCount = 0;
             let workingIntercomCount = 0;
             let issueCount = 0;
             let issuesList = [];
 
-            const totalPhones = 92;
-            const totalIntercoms = 3;
-            const totalDevices = totalPhones + totalIntercoms;
-
-            const fullPhoneBackup = JSON.parse(JSON.stringify(phones));
-
             phones.forEach(p => {
-                const isIntercom = (p.line === "Intercom");
                 if (p.status === "working") {
-                    if (isIntercom) workingIntercomCount++;
-                    else workingPhoneCount++;
-                }
-                if (p.status === "broken") {
+                    if (p.line === "Intercom") workingIntercomCount++;
+                    else workingCount++;
+                } else if (p.status === "issue") {
                     issueCount++;
-                    issuesList.push({
-                        name: p.name,
-                        issue: p.issue || "No description provided",
-                        workOrder: p.workOrder || "N/A"
-                    });
+                    issuesList.push({ name: p.name, issue: p.issue, workOrder: p.workOrder });
                 }
             });
 
-            const archiveData = {
-                resetDate: new Date().toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }),
-                workingCount: `${workingPhoneCount}/${totalPhones}`,
-                workingIntercomCount: `${workingIntercomCount}/${totalIntercoms}`,
-                issueCount: `${issueCount}/${totalDevices}`,
-                issuesList: issuesList,
-                fullPhoneBackup: fullPhoneBackup
+            const summaryArchive = {
+                resetDate: new Date().toLocaleString(),
+                workingCount: workingCount,
+                workingIntercomCount: workingIntercomCount,
+                issueCount: issueCount,
+                issues: issuesList,
+                fullBackupPhones: phones
             };
 
-            lastWeekRef.set(archiveData).then(() => {
-                phones = buildDefaultPhones();
-                phonesRef.set(phones);
-            });
+            lastWeekRef.set(summaryArchive);
+
+            phones = buildDefaultPhones();
+            saveData();
+            closeResetMenu();
+            alert("Weekly progress has been successfully reset and archived.");
         }
 
         function undoResetProgress() {
-            if (!lastWeekDataCache || !lastWeekDataCache.fullPhoneBackup) {
-                alert("No previous backup snapshot available to undo!");
+            if (!lastWeekDataCache || !lastWeekDataCache.fullBackupPhones) {
+                alert("No backup found to restore!");
                 return;
             }
 
-            if (confirm("⚠️ PANIC RESTORE: Are you sure you want to restore the checklist to its pre-reset state?")) {
-                phonesRef.set(lastWeekDataCache.fullPhoneBackup).then(() => {
-                    alert("System successfully restored to previous snapshot!");
-                    closeResetMenu();
-                });
+            if (confirm("Restore the checklist back to its state prior to the last reset?")) {
+                phones = lastWeekDataCache.fullBackupPhones;
+                saveData();
+                closeResetMenu();
+                alert("Restored active state successfully!");
             }
+        }
+
+        /* Changelog & Notepad Actions */
+        function openChangelog() { document.getElementById('changelogModal').style.display = "flex"; }
+        function closeChangelog() { document.getElementById('changelogModal').style.display = "none"; }
+
+        function openNotepad() { document.getElementById('notepadModal').style.display = "flex"; }
+        function closeNotepad() { document.getElementById('notepadModal').style.display = "none"; }
+
+        function closeModals() {
+            document.getElementById('modalPrompt1').style.display = "none";
+            document.getElementById('modalPrompt2').style.display = "none";
+            activePhoneId = null;
+        }
+
+        function saveData() {
+            phonesRef.set(phones);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
         }
     </script>
 </body>
